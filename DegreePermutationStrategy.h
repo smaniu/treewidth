@@ -4,7 +4,7 @@
 #include "PermutationStrategy.h"
 
 class DegreePermutationStrategy: public PermutationStrategy{
-private:
+protected:
   unsigned long compute_statistic(unsigned long node, Graph& graph){
     if(graph.has_neighbours(node)){
       return graph.get_neighbours(node).size();

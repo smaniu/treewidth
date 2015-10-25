@@ -8,6 +8,7 @@
 #include "PermutationStrategy.h"
 #include "DegreePermutationStrategy.h"
 #include "FillInPermutationStrategy.h"
+#include "DegreeFillInPermutationStrategy.h"
 #include "TreeDecomposition.h"
 
 void treewidth(int argc, const char * argv[]){
@@ -30,6 +31,8 @@ void treewidth(int argc, const char * argv[]){
                        (new DegreePermutationStrategy()));
   strategies.push_back(std::unique_ptr<PermutationStrategy>
                        (new FillInPermutationStrategy()));
+  strategies.push_back(std::unique_ptr<PermutationStrategy>
+                       (new DegreeFillInPermutationStrategy()));
   unsigned long src, tgt;
   std::cout << "loading graph..." << std::flush;
   t0 = get_timestamp();

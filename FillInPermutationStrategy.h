@@ -18,15 +18,10 @@ public:
       if(graph.has_neighbours(node))
         for(auto nnode:graph.get_neighbours(node)) new_nodes.insert(nnode);
     }
-    for(auto node:new_nodes){
-      node_type nstruct;
-      nstruct.id = node;
-      nstruct.val = compute_statistic(node, graph);
-      queue.update(queue_nodes[node], nstruct);
-    }
+    PermutationStrategy::recompute(new_nodes, graph);
   }
   
-private:
+protected:
   //Computes fill in for a node
   unsigned long compute_statistic(unsigned long node, Graph& graph){
     unsigned long fillin = 0;

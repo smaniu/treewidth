@@ -35,7 +35,7 @@ The parameters are:
 * *graph* is the name of the graph file
 * *method* is the criteria by which each node is chosen next in the
   decomposition sequence, and can have the following values: **0** minimum
-  degree (default), and **1** minimum fill in
+  degree (default), **1** minimum fill in, and **2** minimum degree+fill in
 * *partial_degree* is the maximum degree at which the decomposition will stop; in this case, the output files will contain a partial decomposition -- this is useful for large graphs
  
 ## Output

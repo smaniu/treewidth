@@ -7,7 +7,7 @@
 
 //Implements the fill in strategy for choosing nodes to decompose:
 // - at each step, the node with the smallest "fill in" (number of missing edges
-//    between negibours) is chosen
+//    between neighbours) is chosen
 class FillInPermutationStrategy: public PermutationStrategy{
 public:
   //For fill in, we need to look also at neighbours of neighbours

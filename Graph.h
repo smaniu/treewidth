@@ -13,9 +13,9 @@ private:
   
 public:
   void add_edge(unsigned long src, unsigned long tgt, bool undirected=true){
-    node_set.insert(src);
-    node_set.insert(tgt);
     if(!has_edge(src, tgt)){
+      node_set.insert(src);
+      node_set.insert(tgt);
       adj_list[src].insert(tgt);
       if(undirected) adj_list[tgt].insert(src);
       num_edges++;

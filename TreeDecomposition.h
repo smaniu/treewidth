@@ -5,6 +5,7 @@
 #include <ostream>
 #include <sstream>
 #include <string>
+#include <algorithm>
 
 #include "PermutationStrategy.h"
 #include "Graph.h"
@@ -27,17 +28,18 @@ public:
   void decompose(unsigned long partial_degree=0){
     //building the first permutation
     strategy.init_permutation(graph);
-    bool termination = false;
     unsigned long max_bag = 0;
     unsigned long bag_id = 0;
     //looping greedily through the permutation
-    while(!termination&&!strategy.empty()){
+    //we stop when the maximum bag has the same width as the remaining graph
+    //or when we achive the partial decomposition condition
+    while(max_bag<graph.number_nodes()&&!strategy.empty()){
       //getting the next node
       unsigned long node = strategy.get_next();
       std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);
       unsigned long width = neigh.size();
       unsigned long prev_max_bag = max_bag;
-      unsigned long new_max_bag = max_bag<width?width:max_bag;
+      unsigned long new_max_bag = std::max(width,max_bag);
       //we stop as soon as we find a bigger bag, in case of partial decomposition
       if(partial_degree!=0&&new_max_bag>partial_degree) break;
       if(new_max_bag!=prev_max_bag){
@@ -56,8 +58,6 @@ public:
       Bag bag = Bag(bag_id, neigh);
       bags.push_back(bag);
       bag_ids[node] = bag_id;
-      //we stop when the maximum bag has the same width as the remaining graph
-      termination = max_bag>=graph.number_nodes()?true:false;
       bag_id++;
     }
     stat << max_bag << "\t" << graph.number_nodes() <<"\t"\
@@ -65,7 +65,7 @@ public:
     //adding the remaining graph to the decomposition
     Bag bag = Bag(bag_id, graph.get_nodes());
     bags.push_back(bag);
-    treewidth = max_bag>graph.number_nodes()-1?max_bag:graph.number_nodes()-1;
+    treewidth = std::max(max_bag,graph.number_nodes()-1);
   }
 
   //Computes the decomposition tree by choosing, for each bag, the neighbour
@@ -76,7 +76,7 @@ public:
       unsigned long min_bag = bags.size()-1;
       for(unsigned long n=0;n<nodes.size()-1;n++){
         if(bag_ids.find(nodes[n])!=bag_ids.end()&&bag_ids[nodes[n]]!=i)
-          min_bag = bag_ids[nodes[n]]<min_bag?bag_ids[nodes[n]]:min_bag;
+          min_bag = std::min(bag_ids[nodes[n]], min_bag);
       }
       bags[i].set_parent(min_bag);
       bags[min_bag].add_to_children(i);

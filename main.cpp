@@ -13,7 +13,6 @@
 
 void treewidth(int argc, const char * argv[]){
   std::string file_name_graph(argv[2]);
-  std::ifstream file(file_name_graph);
   std::stringstream ss, ss_stat;
   timestamp_t t0, t1;
   double time_sec;
@@ -36,9 +35,11 @@ void treewidth(int argc, const char * argv[]){
   unsigned long src, tgt;
   std::cout << "loading graph..." << std::flush;
   t0 = get_timestamp();
+  std::ifstream file(file_name_graph);
   while(file >> src >> tgt){
     graph.add_edge(src, tgt);
   }
+  file.close();
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;

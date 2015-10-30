@@ -28,6 +28,12 @@ public:
   void decompose(unsigned long partial_degree=0){
     //building the first permutation
     strategy.init_permutation(graph);
+    double original_nodes = graph.number_nodes();
+    double original_edges = graph.number_edges();
+    unsigned long one = std::max((unsigned long)1,\
+                                 (unsigned long)(graph.number_nodes()/100));
+    std::string progress= "0% ";
+    std::cout << progress << std::flush;
     unsigned long max_bag = 0;
     unsigned long bag_id = 0;
     //looping greedily through the permutation
@@ -44,9 +50,11 @@ public:
       if(partial_degree!=0&&new_max_bag>partial_degree) break;
       if(new_max_bag!=prev_max_bag){
         stat << prev_max_bag << "\t" << graph.number_nodes() <<"\t"\
-          << graph.number_edges() << std::endl;
+          << graph.number_edges() << "\t" <<\
+          (double)graph.number_nodes()/original_nodes << "\t" <<\
+          (double)graph.number_edges()/original_edges << std::endl;
       }
-      max_bag=new_max_bag; 
+      max_bag=new_max_bag;
       //removing the node from the graph
       graph.remove_node(node);
       //filling missing edges between the neighbours and recomputing statistics
@@ -59,13 +67,24 @@ public:
       bags.push_back(bag);
       bag_ids[node] = bag_id;
       bag_id++;
+      if(bag_id%one==0){
+        std::cout << std::string(progress.length(),'\b') << std::flush;
+        std::stringstream ss_progress;
+        ss_progress << (unsigned long)((bag_id*100)/original_nodes) << "% ";
+        progress = ss_progress.str();
+        std::cout << progress << std::flush;
+      }
     }
     stat << max_bag << "\t" << graph.number_nodes() <<"\t"\
-      << graph.number_edges() << std::endl;
+      << graph.number_edges() << "\t" <<\
+      (double)graph.number_nodes()/original_nodes << "\t" <<\
+      (double)graph.number_edges()/original_edges << std::endl;
     //adding the remaining graph to the decomposition
     Bag bag = Bag(bag_id, graph.get_nodes());
     bags.push_back(bag);
     treewidth = std::max(max_bag,graph.number_nodes()-1);
+    std::cout << std::string(progress.length(),'\b') << std::flush;
+    std::cout << "100% " << std::flush;
   }
 
   //Computes the decomposition tree by choosing, for each bag, the neighbour

@@ -40,6 +40,7 @@ void treewidth(int argc, const char * argv[]){
     graph.add_edge(src, tgt);
   }
   file.close();
+  std::ofstream filestat(ss_stat.str());
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;
@@ -52,18 +53,19 @@ void treewidth(int argc, const char * argv[]){
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;
+  filestat << time_sec << std::endl;
   std::cout << "building tree..."  << std::flush;
   t0 = get_timestamp();
   decomposition.build_tree();
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;
+  filestat << time_sec << std::endl;
   std::cout << "writing decomposition..." << std::flush;
   t0 = get_timestamp();
   std::ofstream filedec(ss.str());
   filedec << decomposition;
   filedec.close();
-  std::ofstream filestat(ss_stat.str());
   filestat << decomposition.get_stat();
   filestat.close();
   t1 = get_timestamp();

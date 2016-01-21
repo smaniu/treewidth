@@ -37,7 +37,7 @@ void treewidth(int argc, const char * argv[]){
   t0 = get_timestamp();
   std::ifstream file(file_name_graph);
   while(file >> src >> tgt){
-    graph.add_edge(src, tgt);
+    if(src!=tgt) graph.add_edge(src, tgt);
   }
   file.close();
   std::ofstream filestat(ss_stat.str());

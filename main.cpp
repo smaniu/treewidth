@@ -9,9 +9,10 @@
 #include "DegreePermutationStrategy.h"
 #include "FillInPermutationStrategy.h"
 #include "DegreeFillInPermutationStrategy.h"
+#include "MCSPermutationStrategy.h"
 #include "TreeDecomposition.h"
 
-void treewidth(int argc, const char * argv[]){
+void upper_bound(int argc, const char * argv[]){
   std::string file_name_graph(argv[2]);
   std::stringstream ss, ss_stat;
   timestamp_t t0, t1;
@@ -32,6 +33,8 @@ void treewidth(int argc, const char * argv[]){
                        (new FillInPermutationStrategy()));
   strategies.push_back(std::unique_ptr<PermutationStrategy>
                        (new DegreeFillInPermutationStrategy()));
+  strategies.push_back(std::unique_ptr<PermutationStrategy>
+                       (new MCSPermutationStrategy()));
   unsigned long src, tgt;
   std::cout << "loading graph..." << std::flush;
   t0 = get_timestamp();
@@ -76,5 +79,5 @@ void treewidth(int argc, const char * argv[]){
 
 int main(int argc, const char * argv[]) {
   std::string first_arg(argv[1]);
-  if(first_arg=="--decompose") treewidth(argc, argv);
+  if(first_arg=="--upper") upper_bound(argc, argv);
 }

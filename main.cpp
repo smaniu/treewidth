@@ -11,8 +11,9 @@
 #include "DegreeFillInPermutationStrategy.h"
 #include "MCSPermutationStrategy.h"
 #include "TreeDecomposition.h"
+#include "LowerBound.h"
 
-void upper_bound(int argc, const char * argv[]){
+void decompose(int argc, const char * argv[]){
   std::string file_name_graph(argv[2]);
   std::stringstream ss, ss_stat;
   timestamp_t t0, t1;
@@ -49,13 +50,23 @@ void upper_bound(int argc, const char * argv[]){
   std::cout << " done in " << time_sec << " sec."<< std::endl;
   std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
     graph.number_edges() << " edges" << std::endl;
-  TreeDecomposition decomposition(graph, *strategies[str]);
-  std::cout << "decomposing..."  << std::flush;
+  LowerBound bound(graph, *strategies[str]);
+  std::cout << "lower bound..."  << std::flush;
   t0 = get_timestamp();
-  decomposition.decompose(part);
+  unsigned long lower = bound.estimate(part);
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;
+  std::cout << "lower bound " << lower << std::endl;
+  filestat << time_sec << std::endl;
+  TreeDecomposition decomposition(graph, *strategies[str]);
+  std::cout << "upper bound..."  << std::flush;
+  t0 = get_timestamp();
+  unsigned long upper = decomposition.decompose(part);
+  t1 = get_timestamp();
+  time_sec = (t1-t0)/(1000.0L*1000.0L);
+  std::cout << " done in " << time_sec << " sec."<< std::endl;
+  std::cout << "upper bound " << upper << std::endl;
   filestat << time_sec << std::endl;
   std::cout << "building tree..."  << std::flush;
   t0 = get_timestamp();
@@ -79,5 +90,5 @@ void upper_bound(int argc, const char * argv[]){
 
 int main(int argc, const char * argv[]) {
   std::string first_arg(argv[1]);
-  if(first_arg=="--upper") upper_bound(argc, argv);
+  if(first_arg=="--treewidth") decompose(argc, argv);
 }

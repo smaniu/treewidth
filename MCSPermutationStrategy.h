@@ -29,4 +29,4 @@ protected:
   }
 };
 
-#endif /* FillInPermutationStrategy_h */
+#endif /* MCSPermutationStrategy_h */

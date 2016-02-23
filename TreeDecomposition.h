@@ -25,7 +25,7 @@ public:
     graph(gr), strategy(str) {}
   
   //Computes decomposition
-  void decompose(unsigned long partial_degree=0){
+  unsigned long decompose(unsigned long partial_degree=0){
     //building the first permutation
     strategy.init_permutation(graph);
     double original_nodes = graph.number_nodes();
@@ -85,6 +85,7 @@ public:
     treewidth = std::max(max_bag,graph.number_nodes()-1);
     std::cout << std::string(progress.length(),'\b') << std::flush;
     std::cout << "100% " << std::flush;
+    return treewidth;
   }
 
   //Computes the decomposition tree by choosing, for each bag, the neighbour

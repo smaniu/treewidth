@@ -27,7 +27,7 @@ public:
   LowerBound(Graph& gr, PermutationStrategy& str):\
   graph(gr), strategy(str) {}
   
-  //Computes decomposition
+  //Computes estimation
   unsigned long estimate(unsigned long partial_degree=0){
     //building the first permutation
     strategy.init_permutation(graph);

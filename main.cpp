@@ -58,9 +58,8 @@ void decompose(int argc, const char * argv[]){
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;
   std::cout << "lower bound " << lower << std::endl;
-  filestat << time_sec << std::endl;
+  filestat << lower << "\t" << time_sec << std::endl;
   graph;
-  std::cout << "loading graph..." << std::flush;
   t0 = get_timestamp();
   std::ifstream file1(file_name_graph);
   while(file1 >> src >> tgt){
@@ -69,9 +68,6 @@ void decompose(int argc, const char * argv[]){
   file1.close();
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
-  std::cout << " done in " << time_sec << " sec."<< std::endl;
-  std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
-    graph.number_edges() << " edges" << std::endl;
   TreeDecomposition decomposition(graph, *strategies[str]);
   std::cout << "upper bound..."  << std::flush;
   t0 = get_timestamp();
@@ -80,7 +76,8 @@ void decompose(int argc, const char * argv[]){
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;
   std::cout << "upper bound " << upper << std::endl;
-  filestat << time_sec << std::endl;
+  filestat << upper << "\t";
+  filestat << time_sec << "\t";
   std::cout << "building tree..."  << std::flush;
   t0 = get_timestamp();
   decomposition.build_tree();

@@ -25,7 +25,7 @@ public:
     for(auto node:graph.get_nodes()){
       node_type nstruct;
       nstruct.id = node;
-      nstruct.val = compute_statistic(node, graph);
+      nstruct.val = compute_statistic(node, graph, true);
       queue_nodes[node]=queue.push(nstruct);
     }
   }
@@ -53,7 +53,8 @@ public:
   
 protected:
   //Computes the statistic for a node -- needs to be implemented by subclasses
-  virtual unsigned long compute_statistic(unsigned long node, Graph& graph) = 0;
+  virtual unsigned long compute_statistic(unsigned long node, Graph& graph,\
+                                          bool initial=false) = 0;
   
 };
 

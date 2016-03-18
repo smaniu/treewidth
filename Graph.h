@@ -50,6 +50,12 @@ public:
     
   }
   
+  void contract_edge(unsigned long src, unsigned long tgt){
+    for(auto v:get_neighbours(tgt))
+      if((v!=src)&&!has_edge(src,v)) add_edge(src,v);
+    remove_node(tgt);
+  }
+  
   bool has_neighbours(unsigned long node) const{
     return adj_list.find(node)!=adj_list.end();
   }

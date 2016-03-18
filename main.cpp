@@ -9,9 +9,51 @@
 #include "DegreePermutationStrategy.h"
 #include "FillInPermutationStrategy.h"
 #include "DegreeFillInPermutationStrategy.h"
+#include "MCSPermutationStrategy.h"
 #include "TreeDecomposition.h"
+#include "LowerBound.h"
 
-void treewidth(int argc, const char * argv[]){
+void lower(int argc, const char * argv[]){
+  std::string file_name_graph(argv[2]);
+  std::stringstream ss, ss_stat;
+  timestamp_t t0, t1;
+  double time_sec;
+  int str = 0;
+  int part = 0;
+  if(argc>3)
+    str = atoi(argv[3]);
+  ss << file_name_graph << "." << str << ".lb";
+  Graph graph;
+  std::vector<std::unique_ptr<PermutationStrategy>> strategies;
+  strategies.push_back(std::unique_ptr<PermutationStrategy>
+                       (new DegreePermutationStrategy()));
+  unsigned long src, tgt;
+  std::cout << "loading graph..." << std::flush;
+  t0 = get_timestamp();
+  std::ifstream file(file_name_graph);
+  while(file >> src >> tgt){
+    if(src!=tgt) graph.add_edge(src, tgt);
+  }
+  file.close();
+  std::ofstream filestat(ss.str());
+  t1 = get_timestamp();
+  time_sec = (t1-t0)/(1000.0L*1000.0L);
+  std::cout << " done in " << time_sec << " sec."<< std::endl;
+  std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
+  graph.number_edges() << " edges" << std::endl;
+  LowerBound bound(graph, *strategies[str]);
+  std::cout << "lower bound..."  << std::flush;
+  t0 = get_timestamp();
+  unsigned long lower = bound.estimate(part);
+  t1 = get_timestamp();
+  time_sec = (t1-t0)/(1000.0L*1000.0L);
+  std::cout << " done in " << time_sec << " sec."<< std::endl;
+  std::cout << "lower bound " << lower << std::endl;
+  filestat << lower << "\t" << time_sec << std::endl;
+  filestat.close();
+}
+
+void upper(int argc, const char * argv[]){
   std::string file_name_graph(argv[2]);
   std::stringstream ss, ss_stat;
   timestamp_t t0, t1;
@@ -32,28 +74,32 @@ void treewidth(int argc, const char * argv[]){
                        (new FillInPermutationStrategy()));
   strategies.push_back(std::unique_ptr<PermutationStrategy>
                        (new DegreeFillInPermutationStrategy()));
+  strategies.push_back(std::unique_ptr<PermutationStrategy>
+                       (new MCSPermutationStrategy()));
   unsigned long src, tgt;
+  std::ofstream filestat(ss_stat.str());
   std::cout << "loading graph..." << std::flush;
   t0 = get_timestamp();
-  std::ifstream file(file_name_graph);
-  while(file >> src >> tgt){
+  std::ifstream file1(file_name_graph);
+  while(file1 >> src >> tgt){
     if(src!=tgt) graph.add_edge(src, tgt);
   }
-  file.close();
-  std::ofstream filestat(ss_stat.str());
+  file1.close();
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;
   std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
-    graph.number_edges() << " edges" << std::endl;
+  graph.number_edges() << " edges" << std::endl;
   TreeDecomposition decomposition(graph, *strategies[str]);
-  std::cout << "decomposing..."  << std::flush;
+  std::cout << "upper bound..."  << std::flush;
   t0 = get_timestamp();
-  decomposition.decompose(part);
+  unsigned long upper = decomposition.decompose(part);
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;
-  filestat << time_sec << std::endl;
+  std::cout << "upper bound " << upper << std::endl;
+  filestat << upper << "\t";
+  filestat << time_sec << "\t";
   std::cout << "building tree..."  << std::flush;
   t0 = get_timestamp();
   decomposition.build_tree();
@@ -76,5 +122,6 @@ void treewidth(int argc, const char * argv[]){
 
 int main(int argc, const char * argv[]) {
   std::string first_arg(argv[1]);
-  if(first_arg=="--decompose") treewidth(argc, argv);
+  if(first_arg=="--upper") upper(argc, argv);
+  else if(first_arg=="--lower") lower(argc, argv);
 }

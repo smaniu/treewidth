@@ -5,7 +5,8 @@
 
 class DegreePermutationStrategy: public PermutationStrategy{
 protected:
-  unsigned long compute_statistic(unsigned long node, Graph& graph){
+  unsigned long compute_statistic(unsigned long node, Graph& graph,\
+                                  bool init=false){
     if(graph.has_neighbours(node)){
       return graph.get_neighbours(node).size();
     }

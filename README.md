@@ -1,6 +1,6 @@
-This repository contains the source code for evaluation upper bounds of the
+This repository contains the source code for evaluation of lower and upper bounds of the
 treewidth of undirected graphs. It implements a subset of the algorithms
-described in [this paper][1].
+described in [this paper][1] and [this paper][2].
 
 # Compiling
 
@@ -28,15 +28,17 @@ where *node1* and *node2* are the endpoints of the edge.
 
 The usage is the following:
 
-    ./treedecomp --decompose <graph_file> [<method> [<partial_degree>]]
+    ./treedecomp --upper|lower <graph_file> [<method> [<partial_degree>]]
 
 The parameters are:
 
-* *graph* is the name of the graph file
+* *upper|lower* chooses between upper or lower bounds
+* *graph_file* is the name of the graph file
 * *method* is the criteria by which each node is chosen next in the
   decomposition sequence, and can have the following values: **0** minimum
   degree (default), **1** minimum fill in, and **2** minimum degree+fill in
-* *partial_degree* is the maximum degree at which the decomposition will stop; in this case, the output files will contain a partial decomposition -- this is useful for large graphs
+  (only for upper bounds)
+* *partial_degree* is the maximum degree at which the decomposition will stop; in this case, the output files will contain a partial decomposition -- this is useful for large graphs (only for upper bounds)
  
 ## Output
 
@@ -73,3 +75,4 @@ the number of child nodes in the tree, and *child_list* is the list of their ids
 The source code is provided as-is under an MIT License.
   
 [1]: <http://www.math2.rwth-aachen.de/~koster/paper/boko09a.pdf> "H. L. Bodlaender, A. M. C. A. Koster. Treewidth Computations I. Upper Bounds. Information and Computation 208(3) 2010"
+[2]: <http://www.cs.uu.nl/research/techreps/repo/CS-2010/2010-022.pdf> "H. L. Bodlaender, A. M. C. A. Koster. Treewidth Computations II. Lower Bounds. Information and Computation 209(7) 2011"

@@ -22,14 +22,31 @@ void lower(int argc, const char * argv[]){
   timestamp_t t0, t1;
   double time_sec;
   int str = 0;
-  int part = 0;
+  int lb = 0;
   if(argc>3)
     str = atoi(argv[3]);
-  ss << file_name_graph << "." << str << ".lb";
+  if(argc>4)
+    lb = atoi(argv[4]);
+  ss << file_name_graph << "." << str << "." << ".lb";
   Graph graph;
+  //strategies
   std::vector<std::unique_ptr<PermutationStrategy>> strategies;
   strategies.push_back(std::unique_ptr<PermutationStrategy>
                        (new DegreePermutationStrategy()));
+  strategies.push_back(std::unique_ptr<PermutationStrategy>
+                       (new FillInPermutationStrategy()));
+  strategies.push_back(std::unique_ptr<PermutationStrategy>
+                       (new DegreeFillInPermutationStrategy()));
+  strategies.push_back(std::unique_ptr<PermutationStrategy>
+                       (new MCSPermutationStrategy()));
+  //lower bounds estimators
+  std::vector<std::unique_ptr<LowerBound>> bounds;
+  bounds.push_back(std::unique_ptr<LowerBound>\
+                   (new LowerBoundMMD(graph, *strategies[str])));
+  bounds.push_back(std::unique_ptr<LowerBound>\
+                   (new LowerBoundMMDPlus(graph, *strategies[str])));
+  bounds.push_back(std::unique_ptr<LowerBound>\
+                   (new Delta2D(graph, *strategies[str])));
   unsigned long src, tgt;
   std::cout << "loading graph..." << std::flush;
   t0 = get_timestamp();
@@ -44,10 +61,9 @@ void lower(int argc, const char * argv[]){
   std::cout << " done in " << time_sec << " sec."<< std::endl;
   std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
   graph.number_edges() << " edges" << std::endl;
-  LowerBoundMMDPlus bound(graph, *strategies[str]);
   std::cout << "lower bound..."  << std::flush;
   t0 = get_timestamp();
-  unsigned long lower = bound.estimate(part);
+  unsigned long lower = bounds[lb]->estimate();
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;

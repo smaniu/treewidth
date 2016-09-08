@@ -1,6 +1,6 @@
 #ifndef Graph_h
 #define Graph_h
-
+#include <stdlib.h>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -10,8 +10,10 @@ private:
   std::unordered_map<unsigned long, std::unordered_set<unsigned long>> adj_list;
   std::unordered_set<unsigned long> node_set;
   unsigned long num_edges = 0;
+
   
 public:
+
   void add_edge(unsigned long src, unsigned long tgt, bool undirected=true){
     if(!has_edge(src, tgt)){
       node_set.insert(src);
@@ -34,7 +36,31 @@ public:
     }
     adj_list.erase(node);
   }
-  
+
+  bool neighbour_improved(int k,unsigned long n1, unsigned long n2){
+		bool retval = false;		
+		std::unordered_set<unsigned long> neigh1 = get_neighbours(n1);
+		std::unordered_set<unsigned long> neigh2 = get_neighbours(n2);
+			
+		unsigned long count = 0;
+		if 	(neigh1.size()>k-1 && neigh2.size()>k-1){
+			for (auto nn1:neigh1){
+				for (auto nn2:neigh2){
+					if (nn1==nn2){
+						count = count+1;		
+						break;
+					}
+			
+				}
+			}		
+		}
+		if (count > k-1){
+			retval = true;
+		}
+
+		return retval;
+}
+ 
   void fill(const std::unordered_set<unsigned long>& nodes,\
             bool undirected=true){
     for(auto src: nodes)

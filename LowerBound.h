@@ -16,19 +16,24 @@
 #include "PermutationStrategy.h"
 #include "Graph.h"
 
+class LowerBound {
+public:
+  virtual unsigned long estimate(unsigned long prevBound=0)=0;
+};
+
 //Class implementing a greedy estimation of the lower bound for graph
 // degeneracy, which is a lower bound on the treewidth of the graph
-class LowerBound{
+class LowerBoundMMDPlus: public LowerBound{
 private:
   Graph& graph;
   PermutationStrategy& strategy;
   unsigned long treewidth = 0;
 public:
-  LowerBound(Graph& gr, PermutationStrategy& str):\
-  graph(gr), strategy(str) {}
+  LowerBoundMMDPlus(Graph& gr, PermutationStrategy& str):\
+  graph(gr), strategy(str) {};
   
   //Computes estimation
-  unsigned long estimate(unsigned long partial_degree=0){
+  virtual unsigned long estimate(unsigned long prevBound=0) override{
     //building the first permutation
     //std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
     //graph.number_edges() << " edges" << std::endl;

@@ -3,7 +3,7 @@
 //  treewidth
 //
 //  Created by Silviu Maniu on 23/02/16.
-//  Copyright © 2016 Silviu Maniu. All rights reserved.
+//  Copyright ï¿½ 2016 Silviu Maniu. All rights reserved.
 //
 
 #ifndef LowerBoundMMD_h
@@ -15,10 +15,11 @@
 
 #include "PermutationStrategy.h"
 #include "Graph.h"
+#include "LowerBound.h"
 
-//Class implementing a greedy estimation of the lower bound for graph
-// degeneracy, which is a lower bound on the treewidth of the graph
-class LowerBoundMMD {
+//Class implementing an estimation of the minimum maximum degree in the graphs,
+//which is a lower bound on graph treewidth
+class LowerBoundMMD : public LowerBound {
 private:
 	Graph& graph;
 	PermutationStrategy& strategy;
@@ -28,7 +29,7 @@ public:
 		graph(gr), strategy(str) {}
 
 	//Computes estimation
-	unsigned long estimate(unsigned long partial_degree = 0) {
+  virtual unsigned long estimate(unsigned long prevBound=0) override {
 		std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
   		graph.number_edges() << " edges" << std::endl;
   

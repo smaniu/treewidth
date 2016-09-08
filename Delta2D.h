@@ -3,7 +3,7 @@
 //  treewidth
 //
 //  Created by Silviu Maniu on 23/02/16.
-//  Copyright © 2016 Silviu Maniu. All rights reserved.
+//  Copyright ï¿½ 2016 Silviu Maniu. All rights reserved.
 //
 
 #ifndef Delta2D_h
@@ -16,22 +16,32 @@
 
 #include "PermutationStrategy.h"
 #include "Graph.h"
+#include "LowerBound.h"
 
-
-class Delta2D {
+class Delta2D : public LowerBound{
 private:
 
-public:
+private:
 	Graph& graph;
-	Graph& graph_temp;
+  Graph graph_temp;
 	PermutationStrategy& strategy;
-
-	Delta2D(Graph& gr, Graph& gr_temp, PermutationStrategy& str) :\
-		graph(gr), graph_temp(gr_temp), strategy(str) {}
+  
+public:
+	Delta2D(Graph& gr, PermutationStrategy& str) :\
+		graph(gr), strategy(str) {}
 
 	//Computes estimation
-	unsigned long estimate(unsigned long n, unsigned long treewidth) {
+  virtual unsigned long estimate(unsigned long prevBound=0) override {
+    unsigned long treewidth = prevBound;
+    for(auto node:graph.get_nodes()) treewidth=estimateForNode(node,treewidth);
+    return treewidth;
+  }
+  
+private:
+  unsigned long estimateForNode(unsigned long prevNode,\
+                                unsigned long prevBound){
 		//building the first permutation
+    unsigned long treewidth = prevBound;
 		graph_temp = graph;
 		strategy.init_permutation(graph_temp);
 		while (!strategy.empty_but1()) {
@@ -39,17 +49,16 @@ public:
 			std::unordered_set<unsigned long> neigh = graph_temp.get_neighbours(node);
 			treewidth = std::max(treewidth, neigh.size());
 			unsigned long node_temp = strategy.get_next_wo_delete();
-			if (node_temp != n ) {
+			if (node_temp != prevNode ) {
 				node_temp = strategy.get_next();
-			}
-			if (node_temp == n) {
+      }
+      else {
 				node_temp = strategy.get_second_next_delete();
 			}
 			
-			graph_temp.remove_node(node_temp);
+      graph_temp.remove_node(node_temp);
 
 		}
-		
 		return treewidth;
 }
 };

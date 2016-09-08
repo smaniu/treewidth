@@ -12,6 +12,9 @@
 #include "MCSPermutationStrategy.h"
 #include "TreeDecomposition.h"
 #include "LowerBound.h"
+#include "LowerBoundMMD.h"
+#include "Delta2D.h"
+#include "CE.h"
 
 void lower(int argc, const char * argv[]){
   std::string file_name_graph(argv[2]);
@@ -41,7 +44,7 @@ void lower(int argc, const char * argv[]){
   std::cout << " done in " << time_sec << " sec."<< std::endl;
   std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
   graph.number_edges() << " edges" << std::endl;
-  LowerBound bound(graph, *strategies[str]);
+  LowerBoundMMDPlus bound(graph, *strategies[str]);
   std::cout << "lower bound..."  << std::flush;
   t0 = get_timestamp();
   unsigned long lower = bound.estimate(part);

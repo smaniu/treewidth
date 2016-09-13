@@ -21,16 +21,14 @@
 //which is a lower bound on graph treewidth
 class LowerBoundMMD : public LowerBound {
 private:
-	Graph& graph;
-	PermutationStrategy& strategy;
 	unsigned long treewidth = 0;
 public:
 	LowerBoundMMD(Graph& gr, PermutationStrategy& str) :\
-		graph(gr), strategy(str) {}
+		LowerBound(gr, str) {}
 
 	//Computes estimation
   virtual unsigned long estimate(unsigned long prevBound=0) override {
-		std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
+		//std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
   		graph.number_edges() << " edges" << std::endl;
   
 		//building the first permutation
@@ -43,18 +41,13 @@ public:
 			//getting the next node
 			unsigned long node = strategy.get_next();
 			u = u+1;
-			std::cout<<"Point 1\n";
 			std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);
 			treewidth = std::max(treewidth, neigh.size());
-			std::cout<<"Point 2\n";
 		//Remove the Node
 		graph.remove_node(node);
-		std::cout<<"The next line is the error for sure\n";
 		//recomputing the degrees in the graph
 		strategy.recompute(neigh, graph);
-		std::cout<<"The above lines are not the error\n";
 		num_node++;
-		std::cout<<u<<"\n";
 	}
 	return treewidth;
 }

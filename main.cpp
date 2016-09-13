@@ -5,16 +5,25 @@
 
 #include "common.h"
 #include "Graph.h"
+
+//Strategies and decompositions
 #include "PermutationStrategy.h"
 #include "DegreePermutationStrategy.h"
 #include "FillInPermutationStrategy.h"
 #include "DegreeFillInPermutationStrategy.h"
 #include "MCSPermutationStrategy.h"
 #include "TreeDecomposition.h"
+
+//Lower Bounds
 #include "LowerBound.h"
 #include "LowerBoundMMD.h"
 #include "Delta2D.h"
 #include "CE.h"
+
+//Meta lower bounds
+#include "MetaLowerBoundHeuristic.h"
+#include "LBN.h"
+#include "LBNPlus.h"
 
 void lower(int argc, const char * argv[]){
   std::string file_name_graph(argv[2]);

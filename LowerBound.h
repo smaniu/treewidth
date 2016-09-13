@@ -17,7 +17,21 @@
 #include "Graph.h"
 
 class LowerBound {
+protected:
+  Graph& graph;
+  PermutationStrategy& strategy;
 public:
+  LowerBound(Graph& graph, PermutationStrategy& strategy) :\
+  graph(graph), strategy(strategy) {};
+  
+  void setGraph(Graph& newGraph) { graph = newGraph;}
+  
+  void setStrategy(PermutationStrategy& newStrategy) {strategy = newStrategy;}
+  
+  Graph& getGraph() {return graph;}
+  
+  PermutationStrategy& getStrategy() {return strategy;}
+  
   virtual unsigned long estimate(unsigned long prevBound=0)=0;
 };
 
@@ -25,12 +39,10 @@ public:
 // degeneracy, which is a lower bound on the treewidth of the graph
 class LowerBoundMMDPlus: public LowerBound{
 private:
-  Graph& graph;
-  PermutationStrategy& strategy;
   unsigned long treewidth = 0;
 public:
   LowerBoundMMDPlus(Graph& gr, PermutationStrategy& str):\
-  graph(gr), strategy(str) {};
+  LowerBound(gr, str) {};
   
   //Computes estimation
   virtual unsigned long estimate(unsigned long prevBound=0) override{

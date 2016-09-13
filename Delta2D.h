@@ -20,15 +20,11 @@
 
 class Delta2D : public LowerBound{
 private:
-
-private:
-	Graph& graph;
   Graph graph_temp;
-	PermutationStrategy& strategy;
   
 public:
 	Delta2D(Graph& gr, PermutationStrategy& str) :\
-		graph(gr), strategy(str) {}
+		LowerBound(gr, str) {}
 
 	//Computes estimation
   virtual unsigned long estimate(unsigned long prevBound=0) override {
@@ -55,9 +51,7 @@ private:
       else {
 				node_temp = strategy.get_second_next_delete();
 			}
-			
       graph_temp.remove_node(node_temp);
-
 		}
 		return treewidth;
 }

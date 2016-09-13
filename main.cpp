@@ -30,32 +30,31 @@ void lower(int argc, const char * argv[]){
   std::stringstream ss, ss_stat;
   timestamp_t t0, t1;
   double time_sec;
-  int str = 0;
+  int meta = 0;
   int lb = 0;
   if(argc>3)
-    str = atoi(argv[3]);
+    lb = atoi(argv[3]);
   if(argc>4)
-    lb = atoi(argv[4]);
-  ss << file_name_graph << "." << str << "." << ".lb";
+    meta = atoi(argv[4]);
+  ss << file_name_graph << "." << lb << "." << ".lb";
   Graph graph;
-  //strategies
-  std::vector<std::unique_ptr<PermutationStrategy>> strategies;
-  strategies.push_back(std::unique_ptr<PermutationStrategy>
-                       (new DegreePermutationStrategy()));
-  strategies.push_back(std::unique_ptr<PermutationStrategy>
-                       (new FillInPermutationStrategy()));
-  strategies.push_back(std::unique_ptr<PermutationStrategy>
-                       (new DegreeFillInPermutationStrategy()));
-  strategies.push_back(std::unique_ptr<PermutationStrategy>
-                       (new MCSPermutationStrategy()));
+  //strategy
+  std::unique_ptr<PermutationStrategy> strategy(new DegreePermutationStrategy());
   //lower bounds estimators
   std::vector<std::unique_ptr<LowerBound>> bounds;
   bounds.push_back(std::unique_ptr<LowerBound>\
-                   (new LowerBoundMMD(graph, *strategies[str])));
+                   (new LowerBoundMMD(graph, *strategy)));
   bounds.push_back(std::unique_ptr<LowerBound>\
-                   (new LowerBoundMMDPlus(graph, *strategies[str])));
+                   (new LowerBoundMMDPlus(graph, *strategy)));
   bounds.push_back(std::unique_ptr<LowerBound>\
-                   (new Delta2D(graph, *strategies[str])));
+                   (new Delta2D(graph, *strategy)));
+  //meta lower bound estimators
+  std::vector<std::unique_ptr<MetaLowerBoundHeuristic>> metas;
+  metas.push_back(std::unique_ptr<MetaLowerBoundHeuristic>\
+                 (new LBN(graph, *bounds[lb])));
+  metas.push_back(std::unique_ptr<MetaLowerBoundHeuristic>\
+                  (new LBNPlus(graph, *bounds[lb])));
+  
   unsigned long src, tgt;
   std::cout << "loading graph..." << std::flush;
   t0 = get_timestamp();
@@ -72,7 +71,13 @@ void lower(int argc, const char * argv[]){
   graph.number_edges() << " edges" << std::endl;
   std::cout << "lower bound..."  << std::flush;
   t0 = get_timestamp();
-  unsigned long lower = bounds[lb]->estimate();
+  unsigned long lower = 0;
+  if(meta==0){
+    lower = bounds[lb]->estimate();
+  }
+  else{
+    lower = metas[meta-1]->estimate();
+  }
   t1 = get_timestamp();
   time_sec = (t1-t0)/(1000.0L*1000.0L);
   std::cout << " done in " << time_sec << " sec."<< std::endl;

@@ -16,8 +16,7 @@
 #include "PermutationStrategy.h"
 #include "Graph.h"
 
-//Class implementing a greedy estimation of the lower bound for graph
-// degeneracy, which is a lower bound on the treewidth of the graph
+//Class implementing the edge contraction
 class CE{
 private:
   Graph& graph;
@@ -29,8 +28,6 @@ public:
   
   void con_edge(){
     //building the first permutation
-    std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
-    graph.number_edges() << " edges" << std::endl;
     strategy.init_permutation(graph);
     unsigned long node = strategy.get_next();
     std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);

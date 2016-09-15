@@ -38,7 +38,7 @@ public:
       //increase the lower bound estimation
       lower_bound.setGraph(graph_temp);
       unsigned long lower_temp = lower_bound.estimate();
-      graph_temp = graph;
+      //graph_temp = graph;
       if (lower_temp > lower){
         lower = lower+1;
         change = true;

@@ -36,7 +36,7 @@ void lower(int argc, const char * argv[]){
     lb = atoi(argv[3]);
   if(argc>4)
     meta = atoi(argv[4]);
-  ss << file_name_graph << "." << lb << "." << ".lb";
+  ss << file_name_graph << "." << meta << "." << lb << "." << ".lb";
   Graph graph;
   //strategy
   std::unique_ptr<PermutationStrategy> strategy(new DegreePermutationStrategy());

@@ -27,7 +27,7 @@ public:
     CE contract(graph_temp, lower_bound.getStrategy());
     while(change) {
       change = false;
-      graph_temp = graph;
+      //graph_temp = graph;
       //We need to perform neighbour improvement on graph
       for(auto n1:graph.get_nodes())
         for(auto n2:graph.get_nodes())

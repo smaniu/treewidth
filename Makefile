@@ -5,7 +5,7 @@ CXX := g++
 CXX_SRCS := $(wildcard ./*.cpp)
 OBJS := ${CXX_SRCS:.cpp=.o}
 
-INCLUDE_DIRS := ./ /usr/local/include
+INCLUDE_DIRS := ./ /usr/local/include /usr/include
 LIBRARY_DIRS := 
 LIBRARIES := 
 

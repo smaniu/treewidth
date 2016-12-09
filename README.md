@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/smaniu/treewidth.svg?branch=lower_bounds)](https://travis-ci.org/smaniu/treewidth)
+[![Build Status](https://travis-ci.org/smaniu/treewidth.svg)](https://travis-ci.org/smaniu/treewidth)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/smaniu/treewidth/master/LICENSE)
 
 This repository contains the source code for evaluation of lower and upper bounds of the

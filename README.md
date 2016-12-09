@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/smaniu/treewidth.svg?branch=lower_bounds)](https://travis-ci.org/smaniu/treewidth)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/smaniu/treewidth/master/LICENSE)
+
 This repository contains the source code for evaluation of lower and upper bounds of the
 treewidth of undirected graphs. It implements a subset of the algorithms
 described in [this paper][1] and [this paper][2].
@@ -38,7 +41,9 @@ The parameters are:
   decomposition sequence, and can have the following values: **0** minimum
   degree (default), **1** minimum fill in, and **2** minimum degree+fill in
   (only for upper bounds)
-* *partial_degree* is the maximum degree at which the decomposition will stop; in this case, the output files will contain a partial decomposition -- this is useful for large graphs (only for upper bounds)
+* *partial_degree* is the maximum degree at which the decomposition will stop;
+  in this case, the output files will contain a partial decomposition -- this is
+  useful for large graphs (only for upper bounds)
  
 ## Output
 

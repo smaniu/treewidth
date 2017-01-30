@@ -11,7 +11,8 @@
 #include "Graph.h"
 #include "Bag.h"
 
-//Class implementing a greedy tree decomposition
+//Class implementing a greedy tree decomposition, which also computes
+//an upper bound on the treewidth
 class TreeDecomposition{
 private:
   Graph& graph;

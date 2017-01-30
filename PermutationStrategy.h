@@ -29,6 +29,14 @@ public:
       queue_nodes[node]=queue.push(nstruct);
     }
   }
+
+  unsigned long  emptyQ(){
+	  node_type nstruct_temp = queue.top();
+	  queue.pop();
+	  unsigned long node_id = nstruct_temp.id;	  
+	  queue_nodes.erase(node_id);
+      return queue.size();
+  }
   
   //Recomputes the statistic and updates the queue for a subset of nodes
   void recompute(std::unordered_set<unsigned long> nodes, Graph& graph){
@@ -49,6 +57,36 @@ public:
     return node_id;
   }
   
+  //Gets the nodes having the smallest value without deleting
+  unsigned long get_next_wo_delete() {
+	  node_type nstruct = queue.top();
+	  unsigned long node_id = nstruct.id;
+	  return node_id;
+  }
+
+  //Gets the nodes having the second smallest value and delete it
+  unsigned long get_second_next_delete() {
+	  node_type nstruct_temp = queue.top();
+	  queue.pop();
+	  node_type nstruct = queue.top();
+	  unsigned long node_id = nstruct.id;
+	  queue.pop();
+	  queue_nodes.erase(node_id);
+	  queue.push(nstruct_temp);
+	  return node_id;
+  }
+
+  //Gets the nodes having the second smallest value
+  unsigned long get_second_next() {
+	  node_type nstruct_temp = queue.top();
+	  queue.pop();
+	  node_type nstruct = queue.top();
+	  unsigned long node_id = nstruct.id;
+	  queue.push(nstruct_temp);
+	  return node_id;
+  }
+  unsigned long Q_siz(){return queue.size();}
+  bool empty_but1() { return !(queue.size()>1); }
   bool empty() {return !(queue.size()>0);}
   
 protected:

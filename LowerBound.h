@@ -16,37 +16,55 @@
 #include "PermutationStrategy.h"
 #include "Graph.h"
 
-//Class implementing a greedy estimation of the lower bound for graph
-// degeneracy, which is a lower bound on the treewidth of the graph
-class LowerBound{
-private:
+class LowerBound {
+protected:
   Graph& graph;
   PermutationStrategy& strategy;
+public:
+  LowerBound(Graph& graph, PermutationStrategy& strategy) :\
+  graph(graph), strategy(strategy) {};
+  
+  void setGraph(Graph& newGraph) { graph = newGraph;}
+  
+  void setStrategy(PermutationStrategy& newStrategy) {strategy = newStrategy;}
+  
+  Graph& getGraph() {return graph;}
+  
+  PermutationStrategy& getStrategy() {return strategy;}
+  
+  virtual unsigned long estimate(unsigned long prevBound=0)=0;
+};
+
+//Class implementing a greedy estimation of the lower bound for graph
+// degeneracy, which is a lower bound on the treewidth of the graph
+class LowerBoundMMDPlus: public LowerBound{
+private:
   unsigned long treewidth = 0;
 public:
-  LowerBound(Graph& gr, PermutationStrategy& str):\
-  graph(gr), strategy(str) {}
+  LowerBoundMMDPlus(Graph& gr, PermutationStrategy& str):\
+  LowerBound(gr, str) {};
   
   //Computes estimation
-  unsigned long estimate(unsigned long partial_degree=0){
+  virtual unsigned long estimate(unsigned long prevBound=0) override{
     //building the first permutation
+    //std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
+    //graph.number_edges() << " edges" << std::endl;
     strategy.init_permutation(graph);
-    double original_nodes = graph.number_nodes();
-    unsigned long one = std::max((unsigned long)1,\
-                                 (unsigned long)(graph.number_nodes()/100));
-    std::string progress= "0% ";
-    std::cout << progress << std::flush;
     treewidth = 0;
     unsigned long num_node = 0;
     //looping greedily through the permutation
+
+    unsigned long u = 0;
+
     while(!strategy.empty()){
-      //getting the next node
       unsigned long node = strategy.get_next();
+      u = u+1;
       std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);
       treewidth = std::max(treewidth,neigh.size());
       //getting the neighbour with least overlap
       unsigned long min_v = 0;
       unsigned long min_ovl = neigh.size();
+      //std::cout<<"2 point\n";
       for(auto v:neigh){
         unsigned long ovl = 0;
         for(auto nv:graph.get_neighbours(v))
@@ -56,21 +74,15 @@ public:
           min_ovl = ovl;
         }
       }
+      
       //contracting the edge
       graph.contract_edge(min_v,node);
       //recomputing the degrees in the graph
       strategy.recompute(neigh, graph);
       num_node++;
-      if(num_node%one==0){
-        std::cout << std::string(progress.length(),'\b') << std::flush;
-        std::stringstream ss_progress;
-        ss_progress << (unsigned long)((num_node*100)/original_nodes) << "% ";
-        progress = ss_progress.str();
-        std::cout << progress << std::flush;
-      }
+      //std::cout<<u<<"\n";
     }
-    std::cout << std::string(progress.length(),'\b') << std::flush;
-    std::cout << "100% " << std::flush;
+    //std::cout<<"end point\n";
     return treewidth;
   }
 };

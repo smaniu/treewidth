@@ -13,7 +13,7 @@ private:
   unsigned long parent=0;
   std::vector<unsigned long> children;
 public:
-  Bag(unsigned long id, std::unordered_set<unsigned long> nodeset){
+  Bag(unsigned long id, const std::unordered_set<unsigned long> &nodeset){
     this->id = id;
     for(unsigned long node:nodeset) nodes.push_back(node);
   }

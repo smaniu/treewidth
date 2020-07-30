@@ -106,7 +106,7 @@ public:
     return (adj_list.find(node))->second;
   }
   
-  std::unordered_set<unsigned long> get_nodes() const{
+  const std::unordered_set<unsigned long> &get_nodes() const{
     return node_set;
   }
   

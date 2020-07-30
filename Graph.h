@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unordered_map>
 #include <unordered_set>
+#include <cassert>
 
 //Class for the graph
 class Graph{
@@ -39,8 +40,8 @@ public:
 
   bool neighbour_improved(int k,unsigned long n1, unsigned long n2){
 		bool retval = false;		
-		std::unordered_set<unsigned long> neigh1 = get_neighbours(n1);
-		std::unordered_set<unsigned long> neigh2 = get_neighbours(n2);
+		auto &neigh1 = get_neighbours(n1);
+		auto &neigh2 = get_neighbours(n2);
 			
 		unsigned long count = 0;
 		if 	(neigh1.size()>k-1 && neigh2.size()>k-1){
@@ -93,17 +94,16 @@ public:
   bool has_edge(unsigned long src, unsigned long tgt) {
     bool retval = false;
     if(has_neighbours(src)){
-      std::unordered_set<unsigned long> neigh = get_neighbours(src);
+      auto &neigh = get_neighbours(src);
       retval = neigh.find(tgt)!=neigh.end();
     }
     return retval;
   }
   
-  std::unordered_set<unsigned long> get_neighbours(unsigned long node) const{
-    if(has_node(node))
-      return (adj_list.find(node))->second;
-    else
-      return std::unordered_set<unsigned long>();
+  const std::unordered_set<unsigned long> &get_neighbours(unsigned long node) const{
+    assert(has_node(node));
+
+    return (adj_list.find(node))->second;
   }
   
   std::unordered_set<unsigned long> get_nodes() const{

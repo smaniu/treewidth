@@ -47,7 +47,7 @@ public:
   //Computes estimation
   virtual unsigned long estimate(unsigned long =0) override{
     //building the first permutation
-    //std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
+    //std::cout << "graph: " << graph.number_nodes() << " nodes " <<
     //graph.number_edges() << " edges" << std::endl;
     strategy.init_permutation(graph);
     treewidth = 0;

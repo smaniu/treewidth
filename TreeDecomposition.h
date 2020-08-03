@@ -33,6 +33,10 @@ public:
     double original_edges = graph.number_edges();
     unsigned long one = std::max((unsigned long)1,\
                                  (unsigned long)(graph.number_nodes()/100));
+
+    // Upper bound on size of the bags vector to avoid redimensioning
+    bags.reserve(graph.number_nodes());
+
     std::string progress= "0% ";
     std::cout << progress << std::flush;
     unsigned long max_bag = 0;

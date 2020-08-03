@@ -24,7 +24,7 @@ public:
 protected:
   //Computes fill in for a node
   unsigned long compute_statistic(unsigned long node, Graph& graph,\
-                                  bool init=false){
+                                  bool = false){
     unsigned long fillin = 0;
     if(graph.has_neighbours(node)){
       std::unordered_set<unsigned long> nodes = graph.get_neighbours(node);

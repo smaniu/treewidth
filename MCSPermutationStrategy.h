@@ -10,7 +10,7 @@
 //    is chosen
 class MCSPermutationStrategy: public PermutationStrategy{
 public:
-  void recompute(std::unordered_set<unsigned long> nodes, Graph& graph){
+  void recompute(std::unordered_set<unsigned long>, Graph& graph){
     for(auto node:graph.get_nodes()){
       node_type nstruct;
       nstruct.id = node;
@@ -21,7 +21,7 @@ public:
   
 protected:
   //This is only useful for the initial phase, for initializing the heap
-  unsigned long compute_statistic(unsigned long node, Graph& graph,\
+  unsigned long compute_statistic(unsigned long, Graph& graph,\
                                   bool init=false){
     unsigned long rtval = 0;
     if(init) rtval = graph.number_nodes();

@@ -27,7 +27,7 @@ public:
 		LowerBound(gr, str) {}
 
 	//Computes estimation
-  virtual unsigned long estimate(unsigned long prevBound=0) override {
+  virtual unsigned long estimate(unsigned long = 0) override {
 		//std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
   		graph.number_edges() << " edges" << std::endl;
   

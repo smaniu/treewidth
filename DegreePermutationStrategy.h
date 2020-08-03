@@ -6,7 +6,7 @@
 class DegreePermutationStrategy: public PermutationStrategy{
 protected:
   unsigned long compute_statistic(unsigned long node, Graph& graph,\
-                                  bool init=false){
+                                  bool =false){
     if(graph.has_neighbours(node)){
       return graph.get_neighbours(node).size();
     }

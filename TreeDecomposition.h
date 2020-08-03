@@ -69,7 +69,7 @@ public:
       bag_ids[node] = bag_id;
       bag_id++;
       if(bag_id%one==0){
-        std::cout << std::string(progress.length(),'\b') << std::flush;
+        std::cout << std::string(progress.length(),'\b');
         std::stringstream ss_progress;
         ss_progress << (unsigned long)((bag_id*100)/original_nodes) << "% ";
         progress = ss_progress.str();

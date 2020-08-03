@@ -38,7 +38,7 @@ public:
     adj_list.erase(node);
   }
 
-  bool neighbour_improved(int k,unsigned long n1, unsigned long n2){
+  bool neighbour_improved(unsigned k,unsigned long n1, unsigned long n2){
 		bool retval = false;		
 		auto &neigh1 = get_neighbours(n1);
 		auto &neigh2 = get_neighbours(n2);

@@ -53,7 +53,7 @@ public:
         stat << prev_max_bag << "\t" << graph.number_nodes() <<"\t"\
           << graph.number_edges() << "\t" <<\
           (double)graph.number_nodes()/original_nodes << "\t" <<\
-          (double)graph.number_edges()/original_edges << std::endl;
+          (double)graph.number_edges()/original_edges << "\n";
       }
       max_bag=new_max_bag;
       //removing the node from the graph
@@ -79,7 +79,7 @@ public:
     stat << max_bag << "\t" << graph.number_nodes() <<"\t"\
       << graph.number_edges() << "\t" <<\
       (double)graph.number_nodes()/original_nodes << "\t" <<\
-      (double)graph.number_edges()/original_edges << std::endl;
+      (double)graph.number_edges()/original_edges << "\n";
     //adding the remaining graph to the decomposition
     Bag bag = Bag(bag_id, graph.get_nodes());
     bags.push_back(bag);
@@ -113,8 +113,8 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& out, TreeDecomposition& dec){
-  out << dec.treewidth << std::endl;
-  out << dec.bags.size() << std::endl;
+  out << dec.treewidth << "\n";
+  out << dec.bags.size() << "\n";
   for(Bag bag:dec.bags) out << bag;
   return out;
 }

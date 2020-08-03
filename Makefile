@@ -11,6 +11,10 @@ LIBRARIES :=
 
 CPPFLAGS += -std=c++17 -W -Wall -O2
 
+ifdef DEBUG
+  CPPFLAGS += -g
+endif
+
 CPPFLAGS += $(foreach includedir,$(INCLUDE_DIRS),-I$(includedir))
 LDFLAGS += $(foreach librarydir,$(LIBRARY_DIRS),-L$(librarydir))
 LDFLAGS += $(foreach library,$(LIBRARIES),-l$(library))

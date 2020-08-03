@@ -15,6 +15,7 @@ private:
 public:
   Bag(unsigned long id, const std::unordered_set<unsigned long> &nodeset){
     this->id = id;
+    nodes.reserve(nodeset.size());
     for(unsigned long node:nodeset) nodes.push_back(node);
   }
   

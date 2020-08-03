@@ -67,11 +67,11 @@ public:
     for(auto src: nodes)
       for(auto tgt: nodes)
         if(undirected){
-          if((src<tgt)&&(adj_list[src].find(tgt)==adj_list[src].end()))
+          if(src<tgt)
             add_edge(src, tgt, undirected);
         }
         else{
-          if((src!=tgt)&&(adj_list[src].find(tgt)==adj_list[src].end()))
+          if(src!=tgt)
             add_edge(src, tgt, undirected);
         }
     

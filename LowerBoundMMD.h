@@ -27,9 +27,9 @@ public:
 		LowerBound(gr, str) {}
 
 	//Computes estimation
-  virtual unsigned long estimate(unsigned long prevBound=0) override {
-		//std::cout << "graph: " << graph.number_nodes() << " nodes " <<\
-  		graph.number_edges() << " edges" << std::endl;
+  virtual unsigned long estimate(unsigned long = 0) override {
+		//std::cout << "graph: " << graph.number_nodes() << " nodes " <<
+  		//graph.number_edges() << " edges" << std::endl;
   
 		//building the first permutation
 		strategy.init_permutation(graph);

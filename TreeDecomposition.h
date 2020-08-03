@@ -33,6 +33,10 @@ public:
     double original_edges = graph.number_edges();
     unsigned long one = std::max((unsigned long)1,\
                                  (unsigned long)(graph.number_nodes()/100));
+
+    // Upper bound on size of the bags vector to avoid redimensioning
+    bags.reserve(graph.number_nodes());
+
     std::string progress= "0% ";
     std::cout << progress << std::flush;
     unsigned long max_bag = 0;
@@ -43,7 +47,8 @@ public:
     while(max_bag<graph.number_nodes()&&!strategy.empty()){
       //getting the next node
       unsigned long node = strategy.get_next();
-      std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);
+      //removing the node from the graph and getting its neighbours
+      std::unordered_set<unsigned long> neigh = graph.remove_node(node);
       unsigned long width = neigh.size();
       unsigned long prev_max_bag = max_bag;
       unsigned long new_max_bag = std::max(width,max_bag);
@@ -53,11 +58,9 @@ public:
         stat << prev_max_bag << "\t" << graph.number_nodes() <<"\t"\
           << graph.number_edges() << "\t" <<\
           (double)graph.number_nodes()/original_nodes << "\t" <<\
-          (double)graph.number_edges()/original_edges << std::endl;
+          (double)graph.number_edges()/original_edges << "\n";
       }
       max_bag=new_max_bag;
-      //removing the node from the graph
-      graph.remove_node(node);
       //filling missing edges between the neighbours and recomputing statistics
       //  for relevant nodes in the graph (the neighbours, most of the time)
       graph.fill(neigh);
@@ -69,7 +72,7 @@ public:
       bag_ids[node] = bag_id;
       bag_id++;
       if(bag_id%one==0){
-        std::cout << std::string(progress.length(),'\b') << std::flush;
+        std::cout << std::string(progress.length(),'\b');
         std::stringstream ss_progress;
         ss_progress << (unsigned long)((bag_id*100)/original_nodes) << "% ";
         progress = ss_progress.str();
@@ -79,7 +82,7 @@ public:
     stat << max_bag << "\t" << graph.number_nodes() <<"\t"\
       << graph.number_edges() << "\t" <<\
       (double)graph.number_nodes()/original_nodes << "\t" <<\
-      (double)graph.number_edges()/original_edges << std::endl;
+      (double)graph.number_edges()/original_edges << "\n";
     //adding the remaining graph to the decomposition
     Bag bag = Bag(bag_id, graph.get_nodes());
     bags.push_back(bag);
@@ -113,8 +116,8 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& out, TreeDecomposition& dec){
-  out << dec.treewidth << std::endl;
-  out << dec.bags.size() << std::endl;
+  out << dec.treewidth << "\n";
+  out << dec.bags.size() << "\n";
   for(Bag bag:dec.bags) out << bag;
   return out;
 }

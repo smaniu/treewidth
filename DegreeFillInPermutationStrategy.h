@@ -18,7 +18,7 @@ class DegreeFillInPermutationStrategy: public FillInPermutationStrategy{
   
 protected:
   unsigned long compute_statistic(unsigned long node, Graph& graph,\
-                                  bool init=false){
+                                  bool = false){
     unsigned long rtval = 0;
     if(graph.has_neighbours(node)) rtval = graph.get_neighbours(node).size();
     return rtval+FillInPermutationStrategy::compute_statistic(node,graph);

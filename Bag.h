@@ -15,6 +15,7 @@ private:
 public:
   Bag(unsigned long id, const std::unordered_set<unsigned long> &nodeset){
     this->id = id;
+    nodes.reserve(nodeset.size());
     for(unsigned long node:nodeset) nodes.push_back(node);
   }
   
@@ -35,14 +36,14 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& out, Bag& bag){
-  out << bag.id << std::endl;
-  out << bag.nodes.size() << std::endl;
+  out << bag.id << "\n";
+  out << bag.nodes.size() << "\n";
   for(auto node:bag.nodes) out << node << "\t";
-  out << std::endl;
-  out << bag.parent << std::endl;
-  out << bag.children.size() << std::endl;
+  out << "\n";
+  out << bag.parent << "\n";
+  out << bag.children.size() << "\n";
   for(auto node:bag.children) out << node << "\t";
-  if(bag.children.size()>0) out << std::endl;
+  if(bag.children.size()>0) out << "\n";
   return out;
 }
 

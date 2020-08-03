@@ -9,7 +9,11 @@ INCLUDE_DIRS := ./ /usr/local/include /usr/include
 LIBRARY_DIRS := 
 LIBRARIES := 
 
-CPPFLAGS += -std=c++0x -W -Wall -O2
+CPPFLAGS += -std=c++17 -W -Wall -O2
+
+ifdef DEBUG
+  CPPFLAGS += -g
+endif
 
 CPPFLAGS += $(foreach includedir,$(INCLUDE_DIRS),-I$(includedir))
 LDFLAGS += $(foreach librarydir,$(LIBRARY_DIRS),-L$(librarydir))

@@ -39,7 +39,7 @@ public:
   }
   
   //Recomputes the statistic and updates the queue for a subset of nodes
-  void recompute(const std::unordered_set<unsigned long> &nodes, Graph& graph){
+  virtual void recompute(const std::unordered_set<unsigned long> &nodes, Graph& graph){
     for(auto node:nodes){
       node_type nstruct;
       nstruct.id = node;

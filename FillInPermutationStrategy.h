@@ -11,7 +11,7 @@
 class FillInPermutationStrategy: public PermutationStrategy{
 public:
   //For fill in, we need to look also at neighbours of neighbours
-  void recompute(std::unordered_set<unsigned long> nodes, Graph& graph){
+  void recompute(const std::unordered_set<unsigned long> &nodes, Graph& graph) override {
     std::unordered_set<unsigned long> new_nodes;
     for(auto node:nodes){
       new_nodes.insert(node);

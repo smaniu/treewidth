@@ -47,7 +47,8 @@ public:
     while(max_bag<graph.number_nodes()&&!strategy.empty()){
       //getting the next node
       unsigned long node = strategy.get_next();
-      std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);
+      //removing the node from the graph and getting its neighbours
+      std::unordered_set<unsigned long> neigh = graph.remove_node(node);
       unsigned long width = neigh.size();
       unsigned long prev_max_bag = max_bag;
       unsigned long new_max_bag = std::max(width,max_bag);
@@ -60,8 +61,6 @@ public:
           (double)graph.number_edges()/original_edges << "\n";
       }
       max_bag=new_max_bag;
-      //removing the node from the graph
-      graph.remove_node(node);
       //filling missing edges between the neighbours and recomputing statistics
       //  for relevant nodes in the graph (the neighbours, most of the time)
       graph.fill(neigh);

@@ -29,13 +29,17 @@ public:
     node_set.insert(node);
   }
   
-  void remove_node(unsigned long node){
+  // Returns adjacency list
+  std::unordered_set<unsigned long> remove_node(unsigned long node){
     node_set.erase(node);
     for(auto neighbour:adj_list[node]){
       adj_list[neighbour].erase(node);
       num_edges--;
     }
-    adj_list.erase(node);
+    auto it = adj_list.find(node);
+    auto adjacency_list = std::move(it->second);
+    adj_list.erase(it);
+    return adjacency_list;
   }
 
   bool neighbour_improved(unsigned k,unsigned long n1, unsigned long n2){

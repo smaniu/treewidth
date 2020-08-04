@@ -105,6 +105,9 @@ public:
       bags[i].set_parent(min_bag);
       bags[min_bag].add_to_children(i);
     }
+
+    // Special semantics: a node is its own parent if it is the root
+    bags[bags.size()-1].set_parent(bags.size()-1); 
   }
   
   //Returns a string cotaining the statistics about the decomposition process

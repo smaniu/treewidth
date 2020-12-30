@@ -98,13 +98,16 @@ public:
     for(unsigned long i=0;i<bags.size()-1;i++){
       std::vector<unsigned long> nodes = bags[i].get_nodes();
       unsigned long min_bag = bags.size()-1;
-      for(unsigned long n=0;n<nodes.size()-1;n++){
+      for(unsigned long n=0;n<nodes.size();n++){
         if(bag_ids.find(nodes[n])!=bag_ids.end()&&bag_ids[nodes[n]]!=i)
           min_bag = std::min(bag_ids[nodes[n]], min_bag);
       }
       bags[i].set_parent(min_bag);
       bags[min_bag].add_to_children(i);
     }
+
+    // Special semantics: a node is its own parent if it is the root
+    bags[bags.size()-1].set_parent(bags.size()-1); 
   }
   
   //Returns a string cotaining the statistics about the decomposition process

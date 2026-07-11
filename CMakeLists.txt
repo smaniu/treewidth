@@ -13,7 +13,7 @@ find_package(Boost REQUIRED)
 # the executable and the tests consume.
 add_library(treewidth_lib INTERFACE)
 target_include_directories(treewidth_lib INTERFACE
-  "${CMAKE_CURRENT_SOURCE_DIR}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/treewidth"
   ${Boost_INCLUDE_DIRS})
 target_compile_features(treewidth_lib INTERFACE cxx_std_17)
 target_compile_options(treewidth_lib INTERFACE -Wall -Wextra)
@@ -26,7 +26,7 @@ if(TREEWIDTH_SANITIZE)
   target_link_options(treewidth_lib INTERFACE -fsanitize=address,undefined)
 endif()
 
-add_executable(treedecomp main.cpp)
+add_executable(treedecomp src/main.cpp)
 target_link_libraries(treedecomp PRIVATE treewidth_lib)
 
 option(TREEWIDTH_BUILD_TESTS "Build the test suite" ON)

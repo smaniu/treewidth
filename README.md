@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/smaniu/treewidth.svg)](https://travis-ci.org/smaniu/treewidth)
+[![CI](https://github.com/smaniu/treewidth/actions/workflows/ci.yml/badge.svg)](https://github.com/smaniu/treewidth/actions/workflows/ci.yml)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/smaniu/treewidth/master/LICENSE)
 
 This repository contains the source code for evaluation of lower and upper bounds of the

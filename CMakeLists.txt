@@ -28,3 +28,9 @@ endif()
 
 add_executable(treedecomp main.cpp)
 target_link_libraries(treedecomp PRIVATE treewidth_lib)
+
+option(TREEWIDTH_BUILD_TESTS "Build the test suite" ON)
+if(TREEWIDTH_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(tests)
+endif()

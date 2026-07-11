@@ -118,7 +118,7 @@ public:
   friend std::ostream& operator<<(std::ostream& out, TreeDecomposition& dec);
 };
 
-std::ostream& operator<<(std::ostream& out, TreeDecomposition& dec){
+inline std::ostream& operator<<(std::ostream& out, TreeDecomposition& dec){
   out << dec.treewidth << "\n";
   out << dec.bags.size() << "\n";
   for(Bag bag:dec.bags) out << bag;

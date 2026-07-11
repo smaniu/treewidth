@@ -7,19 +7,19 @@ described in [this paper][1] and [this paper][2].
 
 # Compiling
 
-The *Makefile* is in the main folder, so simply execute *make*:
+The project builds with CMake (3.20+):
 
-    make clean; make
+    cmake -B build
+    cmake --build build
 
-The output binary is *treedecomp*.
+The output binary is *build/treedecomp*.
 
 ## Dependencies
 
 The code needs the Boost C++ library headers, and specifically the Fibonacci
-heap implementation. It assumes the include files are present in
-*/usr/local/include*. If your Boost installation is someplace else, you have to
-modify the *INCLUDE_DIRS* directive in *Makefile*. The binary library does not
-need to be linked.
+heap implementation (no Boost library is linked). CMake locates them via
+`find_package(Boost)`; on Debian/Ubuntu install them with `apt-get install
+libboost-dev`.
 
 # Usage
 

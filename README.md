@@ -1,9 +1,12 @@
-[![CI](https://github.com/smaniu/treewidth/actions/workflows/ci.yml/badge.svg)](https://github.com/smaniu/treewidth/actions/workflows/ci.yml)
+[![build](https://github.com/smaniu/treewidth/actions/workflows/ci.yml/badge.svg)](https://github.com/smaniu/treewidth/actions/workflows/ci.yml)
+[![tests](https://img.shields.io/github/actions/workflow/status/smaniu/treewidth/ci.yml?label=tests)](https://github.com/smaniu/treewidth/actions/workflows/ci.yml)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/smaniu/treewidth/master/LICENSE)
 
 This repository contains the source code for evaluation of lower and upper bounds of the
 treewidth of undirected graphs. It implements a subset of the algorithms
-described in [this paper][1] and [this paper][2]. The results were published in our ICDT 2019 paper [An Experimental Study of the Treewidth of Real-World Graph Data][3].
+described in [this paper][1] and [this paper][2]. 
+
+Experimental results were published in our ICDT 2019 paper [An Experimental Study of the Treewidth of Real-World Graph Data][3].
 
 # Compiling
 
@@ -19,7 +22,18 @@ The output binary is *build/treedecomp*.
 The code needs the Boost C++ library headers, and specifically the Fibonacci
 heap implementation (no Boost library is linked). CMake locates them via
 `find_package(Boost)`; on Debian/Ubuntu install them with `apt-get install
-libboost-dev`.
+libboost-dev`; on macOS with `brew install boost`.
+
+# Testing
+
+The test suite (using Catch2, in `tests/`) covers graph operations, the
+upper/lower bound heuristics, and decomposition verification. 
+
+It is built by default alongside `treedecomp` and run via CTest:
+
+    cmake -B build
+    cmake --build build
+    ctest --test-dir build --output-on-failure
 
 # Usage
 

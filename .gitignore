@@ -13,3 +13,4 @@
 *.dec
 *.stat
 *.lb
+.DS_Store

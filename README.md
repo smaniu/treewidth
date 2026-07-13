@@ -3,8 +3,7 @@
 
 This repository contains the source code for evaluation of lower and upper bounds of the
 treewidth of undirected graphs. It implements a subset of the algorithms
-described in [this paper][1] and [this paper][2]. The results were published in our ICDT 2019 paper "An Experimental Study of the Treewidth of
-Real-World Graph Data" [3].
+described in [this paper][1] and [this paper][2]. The results were published in our ICDT 2019 paper [An Experimental Study of the Treewidth of Real-World Graph Data][3].
 
 # Compiling
 

@@ -1,25 +1,39 @@
-[![Build Status](https://travis-ci.org/smaniu/treewidth.svg)](https://travis-ci.org/smaniu/treewidth)
+[![Linux](https://github.com/smaniu/treewidth/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/smaniu/treewidth/actions/workflows/ci-linux.yml)
+[![macOS](https://github.com/smaniu/treewidth/actions/workflows/ci-macos.yml/badge.svg)](https://github.com/smaniu/treewidth/actions/workflows/ci-macos.yml)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/smaniu/treewidth/master/LICENSE)
 
 This repository contains the source code for evaluation of lower and upper bounds of the
 treewidth of undirected graphs. It implements a subset of the algorithms
-described in [this paper][1] and [this paper][2].
+described in [this paper][1] and [this paper][2]. 
+
+Experimental results were published in our ICDT 2019 paper [An Experimental Study of the Treewidth of Real-World Graph Data][3].
 
 # Compiling
 
-The *Makefile* is in the main folder, so simply execute *make*:
+The project builds with CMake (3.20+):
 
-    make clean; make
+    cmake -B build
+    cmake --build build
 
-The output binary is *treedecomp*.
+The output binary is *build/treedecomp*.
 
 ## Dependencies
 
 The code needs the Boost C++ library headers, and specifically the Fibonacci
-heap implementation. It assumes the include files are present in
-*/usr/local/include*. If your Boost installation is someplace else, you have to
-modify the *INCLUDE_DIRS* directive in *Makefile*. The binary library does not
-need to be linked.
+heap implementation (no Boost library is linked). CMake locates them via
+`find_package(Boost)`; on Debian/Ubuntu install them with `apt-get install
+libboost-dev`; on macOS with `brew install boost`.
+
+# Testing
+
+The test suite (using Catch2, in `tests/`) covers graph operations, the
+upper/lower bound heuristics, and decomposition verification. 
+
+It is built by default alongside `treedecomp` and run via CTest:
+
+    cmake -B build
+    cmake --build build
+    ctest --test-dir build --output-on-failure
 
 # Usage
 
@@ -77,12 +91,12 @@ the number of child nodes in the tree, and *child_list* is the list of their ids
 
 # Datasets
 
-This code has been tested with the graph datasets available [here][5]
+This code has been tested with the graph datasets available [here][6]
 
 # Contributors
 
-* [Silviu Maniu][3] -- upper, lower bound algorithm
-* [Suraj Sanjay Jog][4] -- meta-algorithms for lower bounds
+* [Silviu Maniu][4] -- upper, lower bound algorithm
+* [Suraj Sanjay Jog][5] -- meta-algorithms for lower bounds
 
 # License
 
@@ -90,6 +104,7 @@ The source code is provided as-is under an MIT License.
   
 [1]: <http://www.math2.rwth-aachen.de/~koster/paper/boko09a.pdf> "H. L. Bodlaender, A. M. C. A. Koster. Treewidth Computations I. Upper Bounds. Information and Computation 208(3) 2010"
 [2]: <http://www.cs.uu.nl/research/techreps/repo/CS-2010/2010-022.pdf> "H. L. Bodlaender, A. M. C. A. Koster. Treewidth Computations II. Lower Bounds. Information and Computation 209(7) 2011"
-[3]: <http://silviu.maniu.info/>
-[4]: <http://sjog2.web.engr.illinois.edu/>
-[5]: <https://www.lri.fr/~maniu/treewidth/>
+[3]: <https://arxiv.org/pdf/1901.06862> "S. Maniu, P. Senellart, S. Jog. An Experimental Study of the Treewidth of Real-World Graph Data. ICDT 2019"
+[4]: <https://silviu.maniu.info/>
+[5]: <https://scholar.google.com/citations?user=N0Lv5FUAAAAJ&hl=en>
+[6]: <https://zenodo.org/records/15068283>

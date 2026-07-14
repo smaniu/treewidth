@@ -35,7 +35,7 @@ public:
   
 };
 
-std::ostream& operator<<(std::ostream& out, Bag& bag){
+inline std::ostream& operator<<(std::ostream& out, Bag& bag){
   out << bag.id << "\n";
   out << bag.nodes.size() << "\n";
   for(auto node:bag.nodes) out << node << "\t";

@@ -1,0 +1,16 @@
+# Local working notes — not tracked
+/CLAUDE.md
+/_docs/
+
+# CMake build tree
+/build/
+
+# Build artifacts
+*.o
+/treedecomp
+
+# Decomposition / stat outputs
+*.dec
+*.stat
+*.lb
+.DS_Store

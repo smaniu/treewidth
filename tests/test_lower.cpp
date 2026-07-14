@@ -13,7 +13,7 @@
 // Delta2D queries get_neighbours() for an already-removed node (assertion in a
 // debug build, SIGSEGV under NDEBUG), and LBN/LBN+ drive the known-buggy CE
 // contraction and the isolated-node get_neighbours UB. These paths are covered
-// once those bugs are fixed. See CLAUDE.md.
+// once those bugs are fixed.
 
 static unsigned long upper_tw(Graph g) {
   DegreePermutationStrategy s;

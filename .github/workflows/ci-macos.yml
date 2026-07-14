@@ -1,0 +1,33 @@
+name: CI (macOS)
+
+on:
+  push:
+    branches: [master, modern-treewidth]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Boost
+        run: brew install boost
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  sanitizers:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Boost
+        run: brew install boost
+      - name: Configure with ASan/UBSan
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DTREEWIDTH_SANITIZE=ON
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure

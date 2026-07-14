@@ -1,5 +1,5 @@
-[![build](https://github.com/smaniu/treewidth/actions/workflows/ci.yml/badge.svg)](https://github.com/smaniu/treewidth/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/github/actions/workflow/status/smaniu/treewidth/ci.yml?label=tests)](https://github.com/smaniu/treewidth/actions/workflows/ci.yml)
+[![Linux](https://github.com/smaniu/treewidth/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/smaniu/treewidth/actions/workflows/ci-linux.yml)
+[![macOS](https://github.com/smaniu/treewidth/actions/workflows/ci-macos.yml/badge.svg)](https://github.com/smaniu/treewidth/actions/workflows/ci-macos.yml)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/smaniu/treewidth/master/LICENSE)
 
 This repository contains the source code for evaluation of lower and upper bounds of the

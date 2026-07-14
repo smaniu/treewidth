@@ -26,7 +26,7 @@ TEST_CASE("upper bound is exact on structured graphs (min-degree)") {
   { DegreePermutationStrategy s; REQUIRE(upper_tw(cycle(3), s) == 2); }
 }
 
-TEST_CASE("upper bound never exceeds n-1") {
+TEST_CASE("upper bound never exceeds N-1 (N = number of nodes)") {
   for (unsigned long n = 2; n <= 8; n++) {
     DegreePermutationStrategy s;
     REQUIRE(upper_tw(grid(n, 3), s) <= 3 * n - 1);

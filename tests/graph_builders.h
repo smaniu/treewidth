@@ -40,7 +40,7 @@ inline Graph grid(unsigned long rows, unsigned long cols) {
   return g;
 }
 
-// Two triangles sharing vertex 2 — matches the CLI baseline graph whose
+// Three triangles attached via vertex 2 — matches the CLI baseline graph whose
 // per-method treewidth values are pinned as goldens.
 inline Graph sample_two_triangles() {
   Graph g;

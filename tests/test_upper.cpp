@@ -34,8 +34,8 @@ TEST_CASE("upper bound never exceeds N-1 (N = number of nodes)") {
 }
 
 // Golden treewidth values (first line of the .dec output) pinned per method on
-// the CLI baseline graph. Method 3 (MCS) pins current *buggy* behavior on
-// purpose, as a regression anchor — see CLAUDE.md.
+// the CLI baseline graph. Method 3 (MCS) pins current known-buggy behavior on
+// purpose, as a regression anchor.
 TEST_CASE("golden treewidth per method on the sample graph") {
   { DegreePermutationStrategy s;       REQUIRE(upper_tw(sample_two_triangles(), s) == 2); }
   { FillInPermutationStrategy s;       REQUIRE(upper_tw(sample_two_triangles(), s) == 2); }

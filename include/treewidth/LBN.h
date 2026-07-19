@@ -48,6 +48,9 @@ public:
         change = true;
       }
     }
+    //restore the base bound to the still-alive shared graph: it was last
+    //repointed at a loop-local copy that is about to go out of scope
+    lower_bound.setGraph(graph);
     return lower;
   }
 };

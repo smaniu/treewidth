@@ -1,4 +1,4 @@
-#include <unordered_set>
+#include <boost/unordered/unordered_flat_set.hpp>
 
 #include "catch.hpp"
 #include "Graph.h"
@@ -38,7 +38,7 @@ TEST_CASE("fill turns a neighbourhood into a clique") {
   g.add_edge(0, 1);
   g.add_edge(0, 2);
   g.add_edge(0, 3);
-  std::unordered_set<unsigned long> ns{1, 2, 3};
+  boost::unordered_flat_set<unsigned long> ns{1, 2, 3};
   g.fill(ns);
   REQUIRE(g.has_edge(1, 2));
   REQUIRE(g.has_edge(1, 3));

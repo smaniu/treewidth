@@ -49,7 +49,7 @@ private:
 		strategy.init_permutation(graph_temp);
 		while (!strategy.empty_but1()) {
 			unsigned long node = strategy.get_second_next();
-			const std::unordered_set<unsigned long>& neigh = graph_temp.get_neighbours(node);
+			const boost::unordered_flat_set<unsigned long>& neigh = graph_temp.get_neighbours(node);
 			treewidth = std::max(treewidth, neigh.size());
 			unsigned long node_temp = strategy.get_next_wo_delete();
 			if (node_temp != prevNode ) {

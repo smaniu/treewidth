@@ -41,7 +41,7 @@ public:
 			//getting the next node
 			unsigned long node = strategy.get_next();
 			u = u+1;
-			std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);
+			boost::unordered_flat_set<unsigned long> neigh = graph.get_neighbours(node);
 			treewidth = std::max(treewidth, neigh.size());
 		//Remove the Node
 		graph.remove_node(node);

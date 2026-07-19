@@ -10,7 +10,7 @@
 //    is chosen
 class MCSPermutationStrategy: public PermutationStrategy{
 public:
-  void recompute(const std::unordered_set<unsigned long>&, Graph& graph) override{
+  void recompute(const boost::unordered_flat_set<unsigned long>&, Graph& graph) override{
     for(auto node:graph.get_nodes()){
       node_type nstruct;
       nstruct.id = node;

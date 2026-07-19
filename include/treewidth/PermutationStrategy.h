@@ -16,7 +16,7 @@ protected:
     }
   };
   boost::heap::fibonacci_heap<node_type> queue;
-  std::unordered_map<unsigned long,
+  boost::unordered_flat_map<unsigned long,
     boost::heap::fibonacci_heap<node_type>::handle_type> queue_nodes;
 
 public:
@@ -49,7 +49,7 @@ public:
   }
   
   //Recomputes the statistic and updates the queue for a subset of nodes
-  virtual void recompute(const std::unordered_set<unsigned long> &nodes, Graph& graph){
+  virtual void recompute(const boost::unordered_flat_set<unsigned long> &nodes, Graph& graph){
     for(auto node:nodes){
       node_type nstruct;
       nstruct.id = node;

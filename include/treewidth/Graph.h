@@ -2,14 +2,16 @@
 #define Graph_h
 #include <stdlib.h>
 #include <unordered_map>
+#include <boost/unordered/unordered_flat_map.hpp>
 #include <unordered_set>
+#include <boost/unordered/unordered_flat_set.hpp>
 #include <cassert>
 
 //Class for the graph
 class Graph{
 private:
-  std::unordered_map<unsigned long, std::unordered_set<unsigned long>> adj_list;
-  std::unordered_set<unsigned long> node_set;
+  boost::unordered_flat_map<unsigned long, boost::unordered_flat_set<unsigned long>> adj_list;
+  boost::unordered_flat_set<unsigned long> node_set;
   unsigned long num_edges = 0;
 
   
@@ -30,7 +32,7 @@ public:
   }
   
   // Returns adjacency list
-  std::unordered_set<unsigned long> remove_node(unsigned long node){
+  boost::unordered_flat_set<unsigned long> remove_node(unsigned long node){
     node_set.erase(node);
     for(auto neighbour:adj_list[node]){
       adj_list[neighbour].erase(node);
@@ -62,7 +64,7 @@ public:
 		return count > k-1;
 }
  
-  void fill(const std::unordered_set<unsigned long>& nodes,\
+  void fill(const boost::unordered_flat_set<unsigned long>& nodes,\
             bool undirected=true){
     for(auto src: nodes)
       for(auto tgt: nodes)
@@ -78,7 +80,10 @@ public:
   }
   
   void contract_edge(unsigned long src, unsigned long tgt){
-    for(auto v:get_neighbours(tgt))
+    //copy tgt's neighbours before the loop: add_edge mutates adj_list and the
+    //flat map has no reference stability, so iterating the live set is unsafe
+    boost::unordered_flat_set<unsigned long> neigh_tgt = get_neighbours(tgt);
+    for(auto v:neigh_tgt)
       if((v!=src)&&!has_edge(src,v)) add_edge(src,v);
     remove_node(tgt);
   }
@@ -100,14 +105,14 @@ public:
     return retval;
   }
   
-  const std::unordered_set<unsigned long> &get_neighbours(unsigned long node) const{
+  const boost::unordered_flat_set<unsigned long> &get_neighbours(unsigned long node) const{
     assert(has_node(node));
-    static const std::unordered_set<unsigned long> empty;
+    static const boost::unordered_flat_set<unsigned long> empty;
     auto it = adj_list.find(node);
     return it == adj_list.end() ? empty : it->second;
   }
   
-  const std::unordered_set<unsigned long> &get_nodes() const{
+  const boost::unordered_flat_set<unsigned long> &get_nodes() const{
     return node_set;
   }
   

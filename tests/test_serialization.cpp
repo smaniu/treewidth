@@ -1,6 +1,6 @@
 #include <iostream>
 #include <sstream>
-#include <unordered_set>
+#include <boost/unordered/unordered_flat_set.hpp>
 
 #include "catch.hpp"
 #include "Bag.h"
@@ -10,7 +10,7 @@
 #include "graph_builders.h"
 
 TEST_CASE("Bag serializes id, node list, parent and child count") {
-  std::unordered_set<unsigned long> ns{7};
+  boost::unordered_flat_set<unsigned long> ns{7};
   Bag bag(3, ns);
   std::ostringstream ss;
   ss << bag;

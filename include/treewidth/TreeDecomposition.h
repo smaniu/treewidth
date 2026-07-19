@@ -18,7 +18,7 @@ private:
   Graph& graph;
   PermutationStrategy& strategy;
   std::vector<Bag> bags;
-  std::unordered_map<unsigned long, unsigned long> bag_ids;
+  boost::unordered_flat_map<unsigned long, unsigned long> bag_ids;
   unsigned long treewidth = 0;
   std::stringstream stat;
 public:
@@ -48,7 +48,7 @@ public:
       //getting the next node
       unsigned long node = strategy.get_next();
       //removing the node from the graph and getting its neighbours
-      std::unordered_set<unsigned long> neigh = graph.remove_node(node);
+      boost::unordered_flat_set<unsigned long> neigh = graph.remove_node(node);
       unsigned long width = neigh.size();
       unsigned long prev_max_bag = max_bag;
       unsigned long new_max_bag = std::max(width,max_bag);

@@ -61,7 +61,7 @@ public:
     while(!strategy.empty()){
       unsigned long node = strategy.get_next();
       u = u+1;
-      std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);
+      boost::unordered_flat_set<unsigned long> neigh = graph.get_neighbours(node);
       treewidth = std::max(treewidth,neigh.size());
       //getting the neighbour with least overlap
       unsigned long min_v = 0;

@@ -16,12 +16,26 @@ protected:
     }
   };
   boost::heap::fibonacci_heap<node_type> queue;
-  std::unordered_map<unsigned long,
+  boost::unordered_flat_map<unsigned long,
     boost::heap::fibonacci_heap<node_type>::handle_type> queue_nodes;
 
 public:
-  //Computes the initial permutation for all nodes in the graph
+  //Clears any residual queue state. init_permutation() calls this itself, but
+  //it is also exposed for callers that need to reset the queue explicitly.
+  void clear(){
+    queue.clear();
+    queue_nodes.clear();
+  }
+
+  //Computes the initial permutation for all nodes in the graph.
+  //Clears first: the same strategy instance is reused on fresh/different graphs
+  //(e.g. Delta2D per node, and the shared strategy driving both CE::con_edge and
+  //a base LowerBound inside LBN/LBN+). A previous call that was not fully drained
+  //would otherwise leave stale entries that desync the queue from this graph --
+  //get_next() would return a node absent from it (get_neighbours assertion /
+  //empty-set fallback).
   void init_permutation(Graph& graph){
+    clear();
     for(auto node:graph.get_nodes()){
       node_type nstruct;
       nstruct.id = node;
@@ -39,7 +53,7 @@ public:
   }
   
   //Recomputes the statistic and updates the queue for a subset of nodes
-  virtual void recompute(const std::unordered_set<unsigned long> &nodes, Graph& graph){
+  virtual void recompute(const boost::unordered_flat_set<unsigned long> &nodes, Graph& graph){
     for(auto node:nodes){
       node_type nstruct;
       nstruct.id = node;

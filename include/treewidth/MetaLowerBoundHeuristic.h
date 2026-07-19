@@ -19,7 +19,9 @@ protected:
 public:
   MetaLowerBoundHeuristic(Graph& graph, LowerBound& lower_bound) :\
   graph(graph), lower_bound(lower_bound) {};
-  
+
+  virtual ~MetaLowerBoundHeuristic() = default;
+
   virtual unsigned long estimate()=0;
 };
 

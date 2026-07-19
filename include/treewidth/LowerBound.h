@@ -18,17 +18,24 @@
 
 class LowerBound {
 protected:
-  Graph& graph;
+  //`graph` is a rebindable pointer, not a reference: setGraph() must repoint the
+  //bound at a different Graph. A meta-heuristic (LBN/LBN+) hands the base bound a
+  //throwaway copy to estimate on; a destructive base (MMD/MMD+) must destroy that
+  //copy, not the meta's shared graph. With a reference member, `graph = newGraph`
+  //copy-assigned into the shared graph and emptied it, making LBN/LBN+ no-ops.
+  Graph* graph;
   PermutationStrategy& strategy;
 public:
   LowerBound(Graph& graph, PermutationStrategy& strategy) :\
-  graph(graph), strategy(strategy) {};
-  
-  void setGraph(Graph& newGraph) { graph = newGraph;}
-  
+  graph(&graph), strategy(strategy) {};
+
+  virtual ~LowerBound() = default;
+
+  void setGraph(Graph& newGraph) { graph = &newGraph;}
+
   void setStrategy(PermutationStrategy& newStrategy) {strategy = newStrategy;}
-  
-  Graph& getGraph() {return graph;}
+
+  Graph& getGraph() {return *graph;}
   
   PermutationStrategy& getStrategy() {return strategy;}
   
@@ -49,7 +56,7 @@ public:
     //building the first permutation
     //std::cout << "graph: " << graph.number_nodes() << " nodes " <<
     //graph.number_edges() << " edges" << std::endl;
-    strategy.init_permutation(graph);
+    strategy.init_permutation(*graph);
     treewidth = 0;
     unsigned long num_node = 0;
     //looping greedily through the permutation
@@ -59,7 +66,7 @@ public:
     while(!strategy.empty()){
       unsigned long node = strategy.get_next();
       u = u+1;
-      std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);
+      boost::unordered_flat_set<unsigned long> neigh = graph->get_neighbours(node);
       treewidth = std::max(treewidth,neigh.size());
       //getting the neighbour with least overlap
       unsigned long min_v = 0;
@@ -67,18 +74,18 @@ public:
       //std::cout<<"2 point\n";
       for(auto v:neigh){
         unsigned long ovl = 0;
-        for(auto nv:graph.get_neighbours(v))
-          if(graph.has_edge(node,nv)) ovl++;
+        for(auto nv:graph->get_neighbours(v))
+          if(neigh.find(nv)!=neigh.end()) ovl++;
         if(min_ovl>=ovl){
           min_v = v;
           min_ovl = ovl;
         }
       }
-      
+
       //contracting the edge
-      graph.contract_edge(min_v,node);
+      graph->contract_edge(min_v,node);
       //recomputing the degrees in the graph
-      strategy.recompute(neigh, graph);
+      strategy.recompute(neigh, *graph);
       num_node++;
       //std::cout<<u<<"\n";
     }

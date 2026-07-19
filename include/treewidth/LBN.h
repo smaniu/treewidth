@@ -36,7 +36,11 @@ public:
       }
       //if the lower bound on the improved graph is greater
       //increase the lower bound estimation
-      lower_bound.setGraph(graph_temp);
+      //estimate on a disposable copy: the base bound is destructive, and
+      //graph_temp (the neighbour-improved graph) must survive to the next
+      //iteration (cf. LBNPlus, which likewise copies into graph_temp1)
+      Graph graph_temp_eval = graph_temp;
+      lower_bound.setGraph(graph_temp_eval);
       unsigned long lower_temp = lower_bound.estimate();
       //graph_temp = graph;
       if (lower_temp > lower){
@@ -44,6 +48,9 @@ public:
         change = true;
       }
     }
+    //restore the base bound to the still-alive shared graph: it was last
+    //repointed at a loop-local copy that is about to go out of scope
+    lower_bound.setGraph(graph);
     return lower;
   }
 };

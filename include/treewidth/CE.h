@@ -30,7 +30,7 @@ public:
     //building the first permutation
     strategy.init_permutation(graph);
     unsigned long node = strategy.get_next();
-    std::unordered_set<unsigned long> neigh = graph.get_neighbours(node);
+    boost::unordered_flat_set<unsigned long> neigh = graph.get_neighbours(node);
     //getting the neighbour with least overlap
     unsigned long min_v = 0;
     unsigned long min_ovl = neigh.size();
@@ -42,10 +42,10 @@ public:
         min_v = v;
         min_ovl = ovl;
       }
-      //contracting the edge
-      graph.contract_edge(min_v,node);
     }
-  
+    //contracting the edge
+    graph.contract_edge(min_v,node);
+
 }
 };
 

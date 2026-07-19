@@ -2,6 +2,7 @@
 #define Bag_h
 
 #include <unordered_set>
+#include <boost/unordered/unordered_flat_set.hpp>
 #include <vector>
 #include <ostream>
 
@@ -13,7 +14,7 @@ private:
   unsigned long parent=0;
   std::vector<unsigned long> children;
 public:
-  Bag(unsigned long id, const std::unordered_set<unsigned long> &nodeset){
+  Bag(unsigned long id, const boost::unordered_flat_set<unsigned long> &nodeset){
     this->id = id;
     nodes.reserve(nodeset.size());
     for(unsigned long node:nodeset) nodes.push_back(node);

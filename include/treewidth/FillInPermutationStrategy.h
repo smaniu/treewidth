@@ -11,8 +11,8 @@
 class FillInPermutationStrategy: public PermutationStrategy{
 public:
   //For fill in, we need to look also at neighbours of neighbours
-  void recompute(const std::unordered_set<unsigned long> &nodes, Graph& graph) override {
-    std::unordered_set<unsigned long> new_nodes;
+  void recompute(const boost::unordered_flat_set<unsigned long> &nodes, Graph& graph) override {
+    boost::unordered_flat_set<unsigned long> new_nodes;
     for(auto node:nodes){
       new_nodes.insert(node);
       if(graph.has_neighbours(node))
@@ -27,10 +27,10 @@ protected:
                                   bool = false){
     unsigned long fillin = 0;
     if(graph.has_neighbours(node)){
-      std::unordered_set<unsigned long> nodes = graph.get_neighbours(node);
+      const boost::unordered_flat_set<unsigned long>& nodes = graph.get_neighbours(node);
       for(auto src: nodes){
         if(graph.has_neighbours(src)){
-          std::unordered_set<unsigned long> neigh = graph.get_neighbours(src);
+          const boost::unordered_flat_set<unsigned long>& neigh = graph.get_neighbours(src);
           for(auto tgt: nodes)
             if((src<tgt)&&(neigh.find(tgt)==neigh.end())) fillin++;
         }

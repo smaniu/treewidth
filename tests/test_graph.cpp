@@ -1,4 +1,4 @@
-#include <unordered_set>
+#include <boost/unordered/unordered_flat_set.hpp>
 
 #include "catch.hpp"
 #include "Graph.h"
@@ -38,7 +38,7 @@ TEST_CASE("fill turns a neighbourhood into a clique") {
   g.add_edge(0, 1);
   g.add_edge(0, 2);
   g.add_edge(0, 3);
-  std::unordered_set<unsigned long> ns{1, 2, 3};
+  boost::unordered_flat_set<unsigned long> ns{1, 2, 3};
   g.fill(ns);
   REQUIRE(g.has_edge(1, 2));
   REQUIRE(g.has_edge(1, 3));
@@ -50,4 +50,24 @@ TEST_CASE("contract_edge merges the target into the source") {
   g.contract_edge(0, 1);  // fold 1 into 0
   REQUIRE_FALSE(g.has_node(1));
   REQUIRE(g.has_edge(0, 2));
+}
+
+TEST_CASE("get_neighbours on a present-but-isolated node returns empty, not UB") {
+  // add_node() puts the node in node_set without ever creating an adj_list
+  // entry for it, so it is present (has_node) but has no adjacency entry
+  // (has_neighbours is false). Before the fix, get_neighbours dereferenced
+  // adj_list.find(node)->second unconditionally, which is end() here (UB).
+  Graph g;
+  g.add_node(42);
+  REQUIRE(g.has_node(42));
+  REQUIRE_FALSE(g.has_neighbours(42));
+  const auto& neigh = g.get_neighbours(42);
+  REQUIRE(neigh.empty());
+
+  // Also exercise it alongside a normal edge, to make sure the shared empty
+  // set doesn't get confused with a real node's adjacency.
+  g.add_edge(1, 2);
+  g.add_node(99);
+  REQUIRE(g.get_neighbours(99).empty());
+  REQUIRE(g.get_neighbours(1).count(2) == 1);
 }

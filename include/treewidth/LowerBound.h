@@ -23,7 +23,9 @@ protected:
 public:
   LowerBound(Graph& graph, PermutationStrategy& strategy) :\
   graph(graph), strategy(strategy) {};
-  
+
+  virtual ~LowerBound() = default;
+
   void setGraph(Graph& newGraph) { graph = newGraph;}
   
   void setStrategy(PermutationStrategy& newStrategy) {strategy = newStrategy;}

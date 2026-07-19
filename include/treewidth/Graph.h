@@ -106,8 +106,9 @@ public:
   
   const std::unordered_set<unsigned long> &get_neighbours(unsigned long node) const{
     assert(has_node(node));
-
-    return (adj_list.find(node))->second;
+    static const std::unordered_set<unsigned long> empty;
+    auto it = adj_list.find(node);
+    return it == adj_list.end() ? empty : it->second;
   }
   
   const std::unordered_set<unsigned long> &get_nodes() const{

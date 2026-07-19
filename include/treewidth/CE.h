@@ -42,10 +42,10 @@ public:
         min_v = v;
         min_ovl = ovl;
       }
-      //contracting the edge
-      graph.contract_edge(min_v,node);
     }
-  
+    //contracting the edge
+    graph.contract_edge(min_v,node);
+
 }
 };
 

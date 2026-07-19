@@ -34,8 +34,13 @@ TEST_CASE("upper bound never exceeds N-1 (N = number of nodes)") {
 }
 
 // Golden treewidth values (first line of the .dec output) pinned per method on
-// the CLI baseline graph. Method 3 (MCS) pins current known-buggy behavior on
-// purpose, as a regression anchor.
+// the CLI baseline graph. Method 3 (MCS) used to run through a by-value
+// recompute() override that silently fell back to the base-class statistic
+// (a no-op override bug); MCSPermutationStrategy::recompute now genuinely
+// overrides the base and the MCS-specific logic is live. The pinned width of
+// 3 was verified unchanged across the fix (ties break the same way), so this
+// remains the correct golden value -- it is no longer pinning known-buggy
+// behavior, it is pinning the fixed, intended behavior.
 TEST_CASE("golden treewidth per method on the sample graph") {
   { DegreePermutationStrategy s;       REQUIRE(upper_tw(sample_two_triangles(), s) == 2); }
   { FillInPermutationStrategy s;       REQUIRE(upper_tw(sample_two_triangles(), s) == 2); }

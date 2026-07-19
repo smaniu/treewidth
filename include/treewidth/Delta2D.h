@@ -39,6 +39,13 @@ private:
 		//building the first permutation
     unsigned long treewidth = prevBound;
 		graph_temp = graph;
+		//The loop below intentionally stops once only one node remains in the
+		//queue (empty_but1()), so the queue is never left empty after a call.
+		//Since `strategy` is shared across every call to estimateForNode
+		//(Delta2D::estimate() reuses it for each node in the graph), it must be
+		//cleared here or the leftover entry from the previous call would desync
+		//the queue from this call's freshly-copied graph_temp.
+		strategy.clear();
 		strategy.init_permutation(graph_temp);
 		while (!strategy.empty_but1()) {
 			unsigned long node = strategy.get_second_next();

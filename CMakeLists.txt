@@ -16,7 +16,7 @@ target_include_directories(treewidth_lib INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include/treewidth"
   ${Boost_INCLUDE_DIRS})
 target_compile_features(treewidth_lib INTERFACE cxx_std_17)
-target_compile_options(treewidth_lib INTERFACE -Wall -Wextra)
+target_compile_options(treewidth_lib INTERFACE -Wall -Wextra -Woverloaded-virtual)
 
 # Optional AddressSanitizer + UndefinedBehaviorSanitizer build (used in CI).
 option(TREEWIDTH_SANITIZE "Build with ASan/UBSan" OFF)

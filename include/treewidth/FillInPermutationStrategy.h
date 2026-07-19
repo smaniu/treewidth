@@ -27,10 +27,10 @@ protected:
                                   bool = false){
     unsigned long fillin = 0;
     if(graph.has_neighbours(node)){
-      std::unordered_set<unsigned long> nodes = graph.get_neighbours(node);
+      const std::unordered_set<unsigned long>& nodes = graph.get_neighbours(node);
       for(auto src: nodes){
         if(graph.has_neighbours(src)){
-          std::unordered_set<unsigned long> neigh = graph.get_neighbours(src);
+          const std::unordered_set<unsigned long>& neigh = graph.get_neighbours(src);
           for(auto tgt: nodes)
             if((src<tgt)&&(neigh.find(tgt)==neigh.end())) fillin++;
         }

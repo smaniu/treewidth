@@ -43,27 +43,23 @@ public:
   }
 
   bool neighbour_improved(unsigned k,unsigned long n1, unsigned long n2){
-		bool retval = false;		
 		auto &neigh1 = get_neighbours(n1);
 		auto &neigh2 = get_neighbours(n2);
-			
+
 		unsigned long count = 0;
 		if 	(neigh1.size()>k-1 && neigh2.size()>k-1){
-			for (auto nn1:neigh1){
-				for (auto nn2:neigh2){
-					if (nn1==nn2){
-						count = count+1;		
-						break;
-					}
-			
+			//count common neighbours by probing the larger set with the smaller,
+			//stopping as soon as the threshold is reached
+			const auto &small = neigh1.size()<neigh2.size()?neigh1:neigh2;
+			const auto &large = neigh1.size()<neigh2.size()?neigh2:neigh1;
+			for (auto nn:small){
+				if (large.find(nn)!=large.end()){
+					if (++count > k-1) break;
 				}
-			}		
-		}
-		if (count > k-1){
-			retval = true;
+			}
 		}
 
-		return retval;
+		return count > k-1;
 }
  
   void fill(const std::unordered_set<unsigned long>& nodes,\

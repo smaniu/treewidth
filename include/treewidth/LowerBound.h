@@ -68,7 +68,7 @@ public:
       for(auto v:neigh){
         unsigned long ovl = 0;
         for(auto nv:graph.get_neighbours(v))
-          if(graph.has_edge(node,nv)) ovl++;
+          if(neigh.find(nv)!=neigh.end()) ovl++;
         if(min_ovl>=ovl){
           min_v = v;
           min_ovl = ovl;

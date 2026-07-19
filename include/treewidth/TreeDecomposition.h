@@ -67,8 +67,7 @@ public:
       strategy.recompute(neigh, graph);
       //adding the bag
       neigh.insert(node);
-      Bag bag = Bag(bag_id, neigh);
-      bags.push_back(bag);
+      bags.emplace_back(bag_id, neigh);
       bag_ids[node] = bag_id;
       bag_id++;
       if(bag_id%one==0){
@@ -121,7 +120,7 @@ public:
 inline std::ostream& operator<<(std::ostream& out, TreeDecomposition& dec){
   out << dec.treewidth << "\n";
   out << dec.bags.size() << "\n";
-  for(Bag bag:dec.bags) out << bag;
+  for(Bag& bag:dec.bags) out << bag;
   return out;
 }
 

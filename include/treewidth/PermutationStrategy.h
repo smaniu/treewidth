@@ -20,18 +20,22 @@ protected:
     boost::heap::fibonacci_heap<node_type>::handle_type> queue_nodes;
 
 public:
-  //Clears any residual queue state. Must be called before reusing the same
-  //strategy instance on a fresh/different graph if the previous
-  //init_permutation() was not fully drained (e.g. Delta2D, which stops at
-  //one remaining node per call) -- otherwise stale entries from the previous
-  //call linger in the queue and desync it from the graph being processed.
+  //Clears any residual queue state. init_permutation() calls this itself, but
+  //it is also exposed for callers that need to reset the queue explicitly.
   void clear(){
     queue.clear();
     queue_nodes.clear();
   }
 
-  //Computes the initial permutation for all nodes in the graph
+  //Computes the initial permutation for all nodes in the graph.
+  //Clears first: the same strategy instance is reused on fresh/different graphs
+  //(e.g. Delta2D per node, and the shared strategy driving both CE::con_edge and
+  //a base LowerBound inside LBN/LBN+). A previous call that was not fully drained
+  //would otherwise leave stale entries that desync the queue from this graph --
+  //get_next() would return a node absent from it (get_neighbours assertion /
+  //empty-set fallback).
   void init_permutation(Graph& graph){
+    clear();
     for(auto node:graph.get_nodes()){
       node_type nstruct;
       nstruct.id = node;

@@ -84,20 +84,17 @@ TEST_CASE("Delta2D lower bound equals the greedy upper bound on a clique") {
   REQUIRE(lb.estimate() == 4);
 }
 
-// --- LBN / LBN+ meta lower bounds (bug 1: isolated-node get_neighbours UB
-// reachable via neighbour_improved(); bug 4: CE double-contraction) --------
+// --- LBN / LBN+ meta lower bounds ---------------------------------------
 //
-// LBN/LBN+ hold their own Graph& alongside the wrapped LowerBound's Graph&,
-// and both are bound to the very same Graph object here -- mirroring how
-// src/main.cpp wires `new LBN(graph, *bounds[lb])` with `bounds[lb]` already
-// constructed on that identical `graph`. LowerBound::setGraph() assigns into
-// the referenced object rather than rebinding the reference, so a *destructive*
-// base bound (LowerBoundMMD/LowerBoundMMDPlus, which remove/contract nodes out
-// of its own graph reference as it runs) empties the shared graph before the
-// meta-heuristic's neighbour-improvement loop -- and LBN+'s CE contraction --
-// ever get a chance to run on real edges. Delta2D does not mutate its own
-// graph reference (it works on an internal copy), so using it as the base
-// bound is what actually drives the improvement loop and the fixed CE path.
+// LBN/LBN+ hold their own Graph& alongside the wrapped LowerBound, both bound
+// to the same Graph object here -- mirroring src/main.cpp's
+// `new LBN(graph, *bounds[lb])`. LowerBound::graph is now a rebindable pointer,
+// so setGraph() repoints the base bound at the throwaway copy a meta-heuristic
+// hands it; a destructive base (LowerBoundMMD/LowerBoundMMDPlus) destroys that
+// copy rather than the meta's shared graph, and the neighbour-improvement loop
+// (and LBN+'s CE contraction) run on real edges. Previously setGraph()
+// copy-assigned into the shared graph, emptying it and making the MMD/MMD+
+// based meta bounds silent no-ops (fixed; see the improvement test below).
 
 TEST_CASE("LBN meta lower bound (Delta2D base) is between 1 and the upper bound") {
   std::vector<Graph> graphs{clique(5), cycle(6), grid(3, 3),
@@ -130,9 +127,8 @@ TEST_CASE("LBN+ meta lower bound (Delta2D base) is between 1 and the upper bound
 }
 
 TEST_CASE("LBN meta lower bound (MMD base) is between 1 and the upper bound") {
-  // MMD is destructive to the shared graph reference (see note above), so
-  // this exercises LBN's degenerate-but-safe path: no crash, and the
-  // invariant still holds even though the improvement loop can't add edges.
+  // With the setGraph() fix the destructive MMD base no longer empties the
+  // meta's shared graph, so this drives LBN's improvement loop on real edges.
   std::vector<Graph> graphs{clique(5), cycle(6), grid(3, 3),
                             sample_two_triangles()};
   for (auto& base : graphs) {
@@ -142,6 +138,50 @@ TEST_CASE("LBN meta lower bound (MMD base) is between 1 and the upper bound") {
     LowerBoundMMD base_lb(g, s);
     LBN lbn(g, base_lb);
     unsigned long lo = lbn.estimate();
+    REQUIRE(lo >= 1);
+    REQUIRE(lo <= up);
+  }
+}
+
+// Regression anchor for the setGraph() no-op fix: with a *destructive* MMD
+// base, LBN+ must be able to strictly improve on the base bound rather than
+// silently returning it. On the 4x4 grid (treewidth 4) the plain MMD bound is
+// 2; the fixed LBN+ neighbour-improvement + contraction reaches the exact
+// treewidth 4. Before the fix this returned the base value (2), unchanged.
+TEST_CASE("LBN+ meta lower bound (MMD base) improves over the base bound") {
+  Graph grid44 = grid(4, 4);
+  unsigned long up = upper_tw(grid44);
+
+  unsigned long base_val;
+  {
+    Graph g = grid44;
+    DegreePermutationStrategy s;
+    LowerBoundMMD base_lb(g, s);
+    base_val = base_lb.estimate();
+  }
+
+  Graph g = grid44;
+  DegreePermutationStrategy s;
+  LowerBoundMMD base_lb(g, s);
+  LBNPlus lbnp(g, base_lb);
+  unsigned long meta_val = lbnp.estimate();
+
+  REQUIRE(meta_val > base_val);   // fix active: not a silent no-op
+  REQUIRE(meta_val <= up);        // still a valid lower bound
+}
+
+// LBN+ with the destructive MMD+ base must also stay valid (<= upper) on the
+// standard graphs now that it runs on real edges.
+TEST_CASE("LBN+ meta lower bound (MMD+ base) is between 1 and the upper bound") {
+  std::vector<Graph> graphs{clique(5), cycle(6), grid(3, 3), grid(4, 4),
+                            sample_two_triangles()};
+  for (auto& base : graphs) {
+    unsigned long up = upper_tw(base);
+    Graph g = base;
+    DegreePermutationStrategy s;
+    LowerBoundMMDPlus base_lb(g, s);
+    LBNPlus lbnp(g, base_lb);
+    unsigned long lo = lbnp.estimate();
     REQUIRE(lo >= 1);
     REQUIRE(lo <= up);
   }

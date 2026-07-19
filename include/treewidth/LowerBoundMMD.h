@@ -32,7 +32,7 @@ public:
   		//graph.number_edges() << " edges" << std::endl;
   
 		//building the first permutation
-		strategy.init_permutation(graph);
+		strategy.init_permutation(*graph);
 		treewidth = 0;
 		unsigned long num_node = 0;
 		//looping greedily through the permutation
@@ -41,12 +41,12 @@ public:
 			//getting the next node
 			unsigned long node = strategy.get_next();
 			u = u+1;
-			boost::unordered_flat_set<unsigned long> neigh = graph.get_neighbours(node);
+			boost::unordered_flat_set<unsigned long> neigh = graph->get_neighbours(node);
 			treewidth = std::max(treewidth, neigh.size());
 		//Remove the Node
-		graph.remove_node(node);
+		graph->remove_node(node);
 		//recomputing the degrees in the graph
-		strategy.recompute(neigh, graph);
+		strategy.recompute(neigh, *graph);
 		num_node++;
 	}
 	return treewidth;

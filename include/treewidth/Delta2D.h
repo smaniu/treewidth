@@ -29,7 +29,7 @@ public:
 	//Computes estimation
   virtual unsigned long estimate(unsigned long prevBound=0) override {
     unsigned long treewidth = prevBound;
-    for(auto node:graph.get_nodes()) treewidth=estimateForNode(node,treewidth);
+    for(auto node:graph->get_nodes()) treewidth=estimateForNode(node,treewidth);
     return treewidth;
   }
   
@@ -38,7 +38,7 @@ private:
                                 unsigned long prevBound){
 		//building the first permutation
     unsigned long treewidth = prevBound;
-		graph_temp = graph;
+		graph_temp = *graph;
 		//The loop below intentionally stops once only one node remains in the
 		//queue (empty_but1()), so the queue is never left empty after a call.
 		//Since `strategy` is shared across every call to estimateForNode
